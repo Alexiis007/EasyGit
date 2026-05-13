@@ -182,6 +182,7 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
         print()
 
     if push:
+        print(f'''git push -u {remote} {active_branch}''')
         command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
         command_exec(f'''git fetch''', cwd=root, response=True)    
 
