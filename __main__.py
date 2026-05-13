@@ -350,30 +350,36 @@ def new_repo():
     return root, remote_root_token
 
 def main():
-    subprocess.run("cls", shell=True)                
-    
-    pretty_printer("Iniciar en repo existente o crear un espacio nuevo:")
-    pretty_printer("\t1- Trabajar sobre un repo local existente")
-    pretty_printer("\t2- Crear un espacio nuevo (Clonacion de repo)")
-    pretty_printer("\t3- Crear un repositorio nuevo")    
-    working_option = int(pretty_printer("R=", inputF=True))
-    
-    if working_option == 1:
-        root = get_workspace() 
-        remote = set_token(root=root)
-    elif working_option == 2:
-        root, remote = clone()        
+    flag = True
+    while flag:
+        subprocess.run("cls", shell=True)                
+        
+        pretty_printer("Iniciar en repo existente o crear un espacio nuevo:")
+        pretty_printer("\t1- Trabajar sobre un repo local existente")
+        pretty_printer("\t2- Crear un espacio nuevo (Clonacion de repo)")
+        pretty_printer("\t3- Crear un repositorio nuevo")    
+        try:
+            working_option = int(pretty_printer("R=", inputF=True))
+        except:
+            working_option = ""
+        
+        if working_option == 1:
+            root = get_workspace() 
+            remote = set_token(root=root)
+            flag = False
+        elif working_option == 2:
+            root, remote = clone()        
+            print("-"*70)  
+            pretty_printer("Pulse enter para continuar:", inputF=True)                
+            subprocess.run("cls", shell=True)
+            flag = False
+        elif working_option == 3:       
+            root, remote = new_repo() 
+            print("-"*70)  
+            pretty_printer("Pulse enter para continuar:", inputF=True)                
+            subprocess.run("cls", shell=True)
+            flag = False
         print("-"*70)  
-        pretty_printer("Pulse enter para continuar:", inputF=True)                
-        subprocess.run("cls", shell=True)
-    elif working_option == 3:       
-        root, remote = new_repo() 
-        print("-"*70)  
-        pretty_printer("Pulse enter para continuar:", inputF=True)                
-        subprocess.run("cls", shell=True)
-    else:
-        pretty_printer("Opcion Incorrecta")
-    print("-"*70)  
 
     update_local(root=root)        
     subprocess.run("cls", shell=True)                
