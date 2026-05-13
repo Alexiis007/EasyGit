@@ -17,7 +17,7 @@ import os
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def pretty_printer(txt: str, inputF:bool = False, fast=True):
+def pretty_printer(txt: str, inputF:bool = False, fast=False):
     
     if fast:
         sys.stdout.write(txt)
