@@ -110,7 +110,15 @@ def set_token(root:str):
 
     token = pretty_printer(f"Por favor ingrese un token de trabajo para el usuario {user}: ", inputF=True)        
 
-    remote_root_token = remote_root_token.replace("github.com", f"{user}:{token}@github.com")
+    if f"{user}:" in remote_root_token:                        
+        print("Detecto token")
+        remote_root_token = remote_root_token
+    else:
+        print("No Detecto token")
+        remote_root_token = remote_root_token.replace("github.com", f"{user}:{token}@github.com")    
+
+    print("EPALE BRO", remote_root_token)
+    input()
 
     return remote_root_token
 
