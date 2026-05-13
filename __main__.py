@@ -72,7 +72,7 @@ def get_workspace():
         
     pretty_printer("Verificando la existencia del archivo .git")
     
-    list_dir = command_exec("dir", cwd=root, response=True)
+    list_dir = command_exec("dir /a", cwd=root, response=True)
 
     if not ".git" in list_dir:
         command_exec("cls", root)
