@@ -110,15 +110,13 @@ def set_token(root:str):
 
     token = pretty_printer(f"Por favor ingrese un token de trabajo para el usuario {user}: ", inputF=True)        
 
-    if f"{user}:" in remote_root_token:                        
-        print("Detecto token")
+    # Si el remote_root (origin) fue registrado con un token en algun momento
+    # Cambiamos el token clavado por el ingresado en dado caso de que este vencido
+    # Sino tenia token registrado avanzamos y lo registramos por primera vez aqui en el else
+    if f"{user}:" in remote_root_token:                                
         remote_root_token = f"https://{user}:{token}@github.com/{user}/{remote_root_token.split("/")[-1]}"
     else:
-        print("No Detecto token")
         remote_root_token = remote_root_token.replace("github.com", f"{user}:{token}@github.com")    
-
-    print("EPALE BRO", remote_root_token)
-    input()
 
     return remote_root_token
 
@@ -189,8 +187,7 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
     else:
         print()
 
-    if push:
-        print(f'''git push -u {remote} {active_branch}''')
+    if push:        
         command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
         command_exec(f'''git fetch''', cwd=root, response=True)    
 
