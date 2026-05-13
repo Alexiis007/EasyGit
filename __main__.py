@@ -112,7 +112,7 @@ def set_token(root:str):
 
     if f"{user}:" in remote_root_token:                        
         print("Detecto token")
-        remote_root_token = remote_root_token
+        remote_root_token = f"https://{user}:{token}@github.com/{user}/{remote_root_token.split("/")[-1]}"
     else:
         print("No Detecto token")
         remote_root_token = remote_root_token.replace("github.com", f"{user}:{token}@github.com")    
