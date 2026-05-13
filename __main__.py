@@ -154,14 +154,14 @@ def change_branch(root:str, remote:str, active_branch:str):
         commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)
         command_exec(f'''git add .''', cwd=root)
         command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)
-        command_exec(f'''git push -u {remote}''', cwd=root, response=True)
+        command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
         command_exec(f'''git switch {branch}''', cwd=root, response=True)
     else:
         command_exec(f'''git switch {branch}''', cwd=root, response=True)
 
     update_local(root=root)        
 
-def commit(root:str, remote:str, push:bool):
+def commit(root:str, remote:str, push:bool, active_branch:str):
     # # logger.info("change_branch - Cambio de rama de trabajo.")
     # # print("-"*70)
 
@@ -182,7 +182,7 @@ def commit(root:str, remote:str, push:bool):
         print()
 
     if push:
-        command_exec(f'''git push -u {remote}''', cwd=root, response=True)
+        command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
         command_exec(f'''git fetch''', cwd=root, response=True)    
 
 def new_branch(root:str, remote:str):
@@ -202,7 +202,7 @@ def new_branch(root:str, remote:str):
     option = int(pretty_printer("Deseas reflejar tu nueva rama en el repo remoto? (1 Si) o (2 No): ", inputF=True))
 
     if option == 1:
-        command_exec(f'''git push -u {remote}''', cwd=root, response=True)
+        command_exec(f'''git push -u {remote} {new_branch}''', cwd=root, response=True)
         update_local(root=root)      
 
 def update_local(root:str):
@@ -330,14 +330,22 @@ def new_repo():
             print("-"*70)  
 
     root = os.path.join(root, repo_name)
-    os.mkdir(root)        
+    os.mkdir(root)            
 
     command_exec("git init", cwd=root, response=True)
+    command_exec(f""" git config user.name "{user}" """, cwd=root)
+    command_exec(f""" git config user.email "{user}@github.com" """, cwd=root)
+    
+    update_local(root=root)
+
+    with open(os.path.join(root, "Borrar.py"), "w",encoding="utf-8") as f:
+        f.write("Puedes borrar este archivo.")
+
     command_exec("git add .", cwd=root, response=True)
-    command_exec("""git commit -m "Commit Inicial" """, cwd=root, response=True)
+    command_exec("""git commit -m "Commit Inicial Repo. Local" """, cwd=root, response=True)
     command_exec(f"git remote add origin {remote_root_token}", cwd=root, response=True)
     command_exec("git branch -M main", cwd=root, response=True)
-    command_exec("git push -u origin main", cwd=root, response=True)
+    command_exec(f"git push --force {remote_root_token} main ", cwd=root, response=True)
 
     return root, remote_root_token
 
@@ -392,13 +400,13 @@ def main():
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)
             case 2:                
-                commit(root=root, remote=remote, push=False)                
+                commit(root=root, remote=remote, push=False, active_branch=active_branch)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)                
             case 3:
-                commit(root=root, remote=remote, push=True)                
+                commit(root=root, remote=remote, push=True, active_branch=active_branch)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
