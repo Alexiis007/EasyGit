@@ -267,7 +267,6 @@ def del_branch(root:str, remote:str, active_branch:str):
     else:
         return
 
-
 def pending_changes(root:str):
     # # logger.info("change_branch - Cambio de rama de trabajo.")
     # # print("-"*70)
@@ -279,6 +278,70 @@ def pending_changes(root:str):
     else:
         return True
  
+def status(root:str, active_branch:str):
+    # # logger.info("change_branch - Cambio de rama de trabajo.")
+    # # print("-"*70)
+
+    pretty_printer(f"Estatus de rama actual - {active_branch}:")
+    print("-"*70)
+            
+    commits_not_stage = []
+    untracked_files = []
+
+    status = command_exec("git status", cwd=root, response=True)
+    if len(status) > 0:
+        status = status.split("\n")
+        count = 0
+
+        for line in status:                        
+            if "Changes not staged for commit" in line:
+                for i in range(count, len(status)):
+                    if "(use" not in status[i] and "\tmodified" in status[i]:
+                        commits_not_stage.append(status[i])
+                    elif "\n" in status[i]:
+                        break            
+            elif "Untracked files" in line:
+                for i in range(count, len(status)):
+                    if "(use" not in status[i] and "\t" in status[i]:
+                        untracked_files.append(status[i])
+                    elif "\n" in status[i]:
+                        break                        
+            count+=1        
+    else:
+        pretty_printer("Historial de commmits vacio...")
+        
+    pretty_printer(f"-> Archivos modificados({len(commits_not_stage)}) - {active_branch}:")    
+    
+    count = 0
+    for i in commits_not_stage:
+        count+=1
+        pretty_printer(f"\t{count}- Archivo modificado: {i.replace("\tmodified:   ", "")}")
+    if count == 0:
+        pretty_printer("\tNo hay archivos modificados.")
+    
+    pretty_printer(f"\n-> Archivos nuevos creados({len(untracked_files)}) - {active_branch}:")    
+    
+    count = 0
+    for i in untracked_files:
+        count+=1
+        pretty_printer(f"\t{count}- Nuevo archivo detectado: {i.replace("\t", "")}")
+
+    if count == 0:
+        pretty_printer("\tNo hay archivos nuevos detectados.")
+        
+def hist_commits(root:str, active_branch:str):
+    pretty_printer(f"-> Historial de commits - {active_branch}:")    
+    
+    # hist_commits = command_exec("git log -5", cwd=root, response=True)
+    # # hist_commits.split("\n")
+
+    # """count = 0
+    # for commit in hist_commits:
+    #     count+=1
+    #     pretty_printer(f"\t{count}- commit")"""
+    
+    # pretty_printer(hist_commits)
+
 def merge(root:str, active_branch:str):
     # # logger.info("change_branch - Cambio de rama de trabajo.")
     # # print("-"*70)
@@ -398,6 +461,8 @@ def main():
         except:
             working_option = ""
         
+        print("-"*70)  
+        
         if working_option == 1:
             root = get_workspace() 
             remote = set_token(root=root)
@@ -419,8 +484,11 @@ def main():
     update_local(root=root)        
     subprocess.run("cls", shell=True)                
 
-    while True:                       
+    while True:                               
+        print("-"*70)  
         active_branch = get_branches(root=root)    
+        print("-"*70)  
+        status(root=root, active_branch=active_branch)                
         print("-"*70)  
         pretty_printer("Que deseas realizar:")    
         pretty_printer("\t1- Cambiar rama de trabajo")
@@ -429,60 +497,67 @@ def main():
         pretty_printer("\t4- Crear rama a partir de otra")
         pretty_printer("\t5- Borrar rama")
         pretty_printer("\t6- Realizar merge")        
-        pretty_printer("\t7- Salida Limpia")
-        pretty_printer("\t0- Estatus")
+        pretty_printer("\t7- Salida Limpia")   
+        pretty_printer("\t8- Historial de commits")        
         option = int(pretty_printer("R=", inputF=True))
         print("-"*70)  
 
         match option:
+            # change_branch(root=root, remote=remote, active_branch=active_branch)                        
             case 1:                                
                 change_branch(root=root, remote=remote, active_branch=active_branch)                        
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)
+            # commit(root=root, remote=remote, push=False, active_branch=active_branch)                
             case 2:                
                 commit(root=root, remote=remote, push=False, active_branch=active_branch)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)                
+            # commit(root=root, remote=remote, push=True, active_branch=active_branch)                
             case 3:
                 commit(root=root, remote=remote, push=True, active_branch=active_branch)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)   
+            # new_branch(root=root, remote=remote)                
             case 4:
                 new_branch(root=root, remote=remote)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)   
+            # del_branch(root=root, remote=remote, active_branch=active_branch)                
             case 5:
                 del_branch(root=root, remote=remote, active_branch=active_branch)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)   
+            # merge(root=root, active_branch=active_branch)                
             case 6:
                 merge(root=root, active_branch=active_branch)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)   
+            # exit(root=root, active_branch=active_branch)                
             case 7:
                 exit(root=root, active_branch=active_branch)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)   
-            case 0:
-                pending_changes(root=root)                
+                subprocess.run("cls", shell=True)               
+            # hist_commits()                
+            case 8:                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)
+                subprocess.run("cls", shell=True)               
 
 
 if __name__ == "__main__":
