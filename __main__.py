@@ -19,15 +19,26 @@ import shutil
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def nerv_art():
-    art = """
-        ███╗   ██╗███████╗██████╗ ██╗   ██╗
-        ████╗  ██║██╔════╝██╔══██╗██║   ██║
-        ██╔██╗ ██║█████╗  ██████╔╝██║   ██║
-        ██║╚██╗██║██╔══╝  ██╔══██╗╚██╗ ██╔╝
-        ██║ ╚████║███████╗██║  ██║ ╚████╔╝
-        ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝  ╚═══╝
-    """
+def nerv_art(option:int=1):
+    if option == 1:
+        art = """
+            ███╗   ██╗███████╗██████╗ ██╗   ██╗
+            ████╗  ██║██╔════╝██╔══██╗██║   ██║
+            ██╔██╗ ██║█████╗  ██████╔╝██║   ██║
+            ██║╚██╗██║██╔══╝  ██╔══██╗╚██╗ ██╔╝
+            ██║ ╚████║███████╗██║  ██║ ╚████╔╝
+            ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝  ╚═══╝
+        """
+    elif option == 2:
+        art = """
+            ███╗   ██╗███████╗██████╗ ██╗   ██╗
+            ████╗  ██║██╔════╝██╔══██╗██║   ██║
+            ██╔██╗ ██║█████╗  ██████╔╝██║   ██║
+            ██║╚██╗██║██╔══╝  ██╔══██╗╚██╗ ██╔╝
+            ██║ ╚████║███████╗██║  ██║ ╚████╔╝
+            ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝  ╚═══╝            
+                        Alexsis007        
+        """
 
     pretty_printer(art)    
 
@@ -128,7 +139,7 @@ def set_token(root:str):
     command_exec(f""" git config user.name "{user}" """, cwd=root)
     command_exec(f""" git config user.email "{user}@github.com" """, cwd=root)
 
-    token = pretty_printer(f"Por favor ingrese un token de trabajo para el usuario {user}:\n", inputF=True)        
+    token = pretty_printer(f"Ingrese token de trabajo para el usuario {user}:\n", inputF=True)        
 
     # Si el remote_root (origin) fue registrado con un token en algun momento
     # Cambiamos el token clavado por el ingresado en dado caso de que este vencido
@@ -194,8 +205,8 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
 
     pretty_printer("Opcion de guardado: ")
     pretty_printer("\t1- Guardar todo")
-    pretty_printer("\t2- Especificar archivos:")
-    pretty_printer("\t3- Cancelar commit:")
+    pretty_printer("\t2- Especificar archivos")
+    pretty_printer("\t3- Cancelar commit")
     option = int(pretty_printer("R=", inputF=True)) 
 
     command_exec(f'''git fetch''', cwd=root, response=True)    
@@ -505,8 +516,9 @@ def main():
     while flag:
         subprocess.run("cls", shell=True)                
         
-        nerv_art()
+        nerv_art(2)
         
+        print("-"*60)  
         pretty_printer("Iniciar en repo existente o crear un espacio nuevo:")
         pretty_printer("\t1- Trabajar sobre un repo local existente")
         pretty_printer("\t2- Crear un espacio nuevo (Clonacion de repo)")
@@ -540,7 +552,7 @@ def main():
     subprocess.run("cls", shell=True)                    
 
     while True:         
-        nerv_art()                      
+        nerv_art(2)                      
         print("-"*60)  
         active_branch = get_branches(root=root)    
         print("-"*60)  
@@ -556,6 +568,7 @@ def main():
         pretty_printer("\t6- Realizar merge")        
         pretty_printer("\t7- Salida Limpia (Experimental)")   
         pretty_printer("\t8- Historial de commits")        
+        pretty_printer("\t0- Regresar al menu anterior")        
         option = int(pretty_printer("R=", inputF=True))
         print("-"*60)  
 
@@ -563,60 +576,77 @@ def main():
             # change_branch(root=root, remote=remote, active_branch=active_branch)                        
             case 1:                                
                 change_branch(root=root, remote=remote, active_branch=active_branch)                        
-                pretty_printer(f"\nTarea finalizada con exito !")
+                print()
+                print("-"*60)  
+                pretty_printer(f"Tarea finalizada con exito !")
                 print("-"*60)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)
             # commit(root=root, remote=remote, push=False, active_branch=active_branch)                
             case 2:                
                 commit(root=root, remote=remote, push=False, active_branch=active_branch)                
-                pretty_printer(f"\nTarea finalizada con exito !")
+                print()
+                print("-"*60)  
+                pretty_printer(f"Tarea finalizada con exito !")
                 print("-"*60)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)                
             # commit(root=root, remote=remote, push=True, active_branch=active_branch)                
             case 3:
                 commit(root=root, remote=remote, push=True, active_branch=active_branch)                
-                pretty_printer(f"\nTarea finalizada con exito !")
+                print()
+                print("-"*60)  
+                pretty_printer(f"Tarea finalizada con exito !")
                 print("-"*60)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)   
             # new_branch(root=root, remote=remote)                
             case 4:
                 new_branch(root=root, remote=remote)                
-                pretty_printer(f"\nTarea finalizada con exito !")
+                print()
+                print("-"*60)  
+                pretty_printer(f"Tarea finalizada con exito !")
                 print("-"*60)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)   
             # del_branch(root=root, remote=remote, active_branch=active_branch)                
             case 5:
                 del_branch(root=root, remote=remote, active_branch=active_branch)                
-                pretty_printer(f"\nTarea finalizada con exito !")
+                print()
+                print("-"*60)  
+                pretty_printer(f"Tarea finalizada con exito !")
                 print("-"*60)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)   
             # merge(root=root, active_branch=active_branch)                
             case 6:
                 merge(root=root, active_branch=active_branch)                
-                pretty_printer(f"\nTarea finalizada con exito !")
+                print()
+                print("-"*60)  
+                pretty_printer(f"Tarea finalizada con exito !")
                 print("-"*60)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)   
             # exit(root=root)                
             case 7:
                 exit_clean(root=root)                
-                pretty_printer(f"\nTarea finalizada con exito !")
+                print()
+                print("-"*60)  
+                pretty_printer(f"Tarea finalizada con exito !")
                 print("-"*60)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)               
             # hist_commits(root=root, active_branch=active_branch)                
             case 8:                
                 hist_commits(root=root, active_branch=active_branch)
+                print()
                 print("-"*60)  
                 pretty_printer(f"Tarea finalizada con exito !")
                 print("-"*60)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)                               
+                subprocess.run("cls", shell=True)          
+            case 0:                
+                main()                           
 
 if __name__ == "__main__":
     main()
