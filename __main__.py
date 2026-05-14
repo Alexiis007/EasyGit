@@ -17,7 +17,7 @@ import os
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def pretty_printer(txt: str, inputF:bool = False, fast=False):
+def pretty_printer(txt: str, inputF:bool = False, fast=True):
     
     if fast:
         sys.stdout.write(txt)
@@ -53,7 +53,7 @@ def command_exec(command:str, cwd:str, response:bool = False):
         except:
             pretty_printer(f"Error al ejecutar el comando '{command}'...")
             return None
-        return output.stdout 
+        return f"{output.stdout}\n{output.stderr}"
 
 def get_workspace():
     # logger.info("get_workspace - Obtencion de espacio de trabajo.")
@@ -124,9 +124,10 @@ def get_branches(root:str):
     # logger.info("get_branches - Obtencion de ramas en el repositorio remoto.")
     # print("-"*70)
 
-    pretty_printer("Ramas existentes en el espacio de trabajo:")    
+    pretty_printer("Ramas existentes en el espacio de trabajo:")   
+    print("-"*70) 
 
-    res = command_exec("git branch", response=True, cwd=root)
+    res = command_exec("git branch -a", response=True, cwd=root)
     
     active_branch = ""
 
@@ -136,7 +137,7 @@ def get_branches(root:str):
         if "*" in i:
             active_branch = i.split(" ")[-1]
         
-    pretty_printer(f"-> Rama activa: {active_branch}")    
+    pretty_printer(f"->  Rama activa: {active_branch}")    
 
     return active_branch
 
@@ -184,8 +185,9 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
         command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)                
     elif option == 2:
         print("En desarrollo...")
+        return
     else:
-        print()
+        return
 
     if push:        
         command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
@@ -230,6 +232,10 @@ def del_branch(root:str, remote:str, active_branch:str):
     if branch.lower() in denied:
         pretty_printer("No puedes eliminar main...")
         return
+    
+    if active_branch == branch:
+        pretty_printer(f"No puedes borrar {branch} porque actualmente estas en ella...") 
+        return
 
     pretty_printer(f"Estas seguro de que deseas eliminar la rama {branch}:")
     pretty_printer("\t1- Si, continuar")
@@ -237,10 +243,30 @@ def del_branch(root:str, remote:str, active_branch:str):
     option = int(pretty_printer("R=", inputF=True))
 
     if option == 1:
-        if active_branch == branch:
-            pretty_printer(f"No puedes borrar {branch} porque actualmente estas en ella...") 
+        res = command_exec(f"git branch -d {branch}", cwd=root, response=True)           
+
+        if "git branch -D" in res:
+            print("-"*70)
+            pretty_printer(f"Ojo ! {branch} tiene commits que probablemente no exitan en main")
+            pretty_printer("\t1- Salir y revizar esos commits")
+            pretty_printer("\t2- Forzar eliminacion de la rama")
+            option = int(pretty_printer("R= ", inputF=True))
+
+            if option == 2:
+                command_exec(f"git branch -D {branch}", cwd=root, response=True)   
+            else:
+                return
+
+        option = int(pretty_printer("Deseas reflejar tu nueva rama en el repo remoto? (1 Si) o (2 No): ", inputF=True))
+
+        if option == 1:
+            command_exec(f'''git push -u {remote} {branch}''', cwd=root, response=True)
+            update_local(root=root)   
         else:
-            command_exec(f"git branch -d {branch}", cwd=root, response=True)    
+            return    
+    else:
+        return
+
 
 def pending_changes(root:str):
     # # logger.info("change_branch - Cambio de rama de trabajo.")
@@ -355,6 +381,9 @@ def new_repo():
 
     return root, remote_root_token
 
+def exit_clean():
+    pretty_printer()
+
 def main():
     flag = True
     while flag:
@@ -400,6 +429,7 @@ def main():
         pretty_printer("\t4- Crear rama a partir de otra")
         pretty_printer("\t5- Borrar rama")
         pretty_printer("\t6- Realizar merge")        
+        pretty_printer("\t7- Salida Limpia")
         pretty_printer("\t0- Estatus")
         option = int(pretty_printer("R=", inputF=True))
         print("-"*70)  
@@ -437,6 +467,12 @@ def main():
                 subprocess.run("cls", shell=True)   
             case 6:
                 merge(root=root, active_branch=active_branch)                
+                pretty_printer(f"\nTarea finalizada con exito !")
+                print("-"*70)  
+                pretty_printer("Pulse enter para continuar:", inputF=True)                
+                subprocess.run("cls", shell=True)   
+            case 7:
+                exit(root=root, active_branch=active_branch)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
