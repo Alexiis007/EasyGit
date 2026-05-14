@@ -459,9 +459,15 @@ def exit_clean(root:str):
     option = pretty_printer("R=", inputF=True)
     print("-"*70)  
 
-    if option == 1:
-        if os.path.exists(root):
-            shutil.rmtree(root)
+    if option == 1:        
+        if os.path.exists(root):            
+            try:
+                os.chdir("C:/")
+                shutil.rmtree(root)
+            except PermissionError:
+                pretty_printer("La carpeta está en uso !")
+                return
+            
             if not os.path.exists(root):
                 pretty_printer("Eliminacion completa...")
         else:
