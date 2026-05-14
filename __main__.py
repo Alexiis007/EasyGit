@@ -571,9 +571,9 @@ def main():
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)   
-            # exit(root=root, active_branch=active_branch)                
+            # exit(root=root)                
             case 7:
-                exit(root=root, active_branch=active_branch)                
+                exit_clean(root=root)                
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
