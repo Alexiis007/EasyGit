@@ -183,8 +183,11 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
         command_exec(f'''git add .''', cwd=root)
         command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)                
     elif option == 2:
-        print("En desarrollo...")
-        return
+        files = str(pretty_printer("Separados por espacios ingrese los archivos que desea guardar:", inputF=True))
+        command_exec(f'''git add {files}''', cwd=root)
+
+        commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)            
+        command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)     
     elif option == 3:
         return
     else:
