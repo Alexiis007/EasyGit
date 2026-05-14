@@ -456,7 +456,7 @@ def exit_clean(root:str):
     pretty_printer("Esta seguro de continuar con la accion:")
     pretty_printer("\t1- Si")
     pretty_printer("\t2- No")
-    option = pretty_printer("R=", inputF=True)
+    option = int(pretty_printer("R=", inputF=True))
     print("-"*70)  
 
     if option == 1:        
