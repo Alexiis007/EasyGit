@@ -1,6 +1,3 @@
-# Recolecolector de basura
-import gc
-
 # Para logs
 import logging
 
@@ -11,6 +8,7 @@ import time
 # Para la ejecucion de comandos
 import subprocess
 
+# Utilidades con ruteo y de mas
 import os
 
 # Logger Config
@@ -137,7 +135,7 @@ def get_branches(root:str):
         if "*" in i:
             active_branch = i.split(" ")[-1]
         
-    pretty_printer(f"->  Rama activa: {active_branch}")    
+    pretty_printer(f"\n->  Rama activa: {active_branch}")    
 
     return active_branch
 
