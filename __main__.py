@@ -175,6 +175,7 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
     pretty_printer("Opcion de guardado: ")
     pretty_printer("\t1- Guardar todo")
     pretty_printer("\t2- Especificar archivos:")
+    pretty_printer("\t3- Cancelar commit:")
     option = int(pretty_printer("R=", inputF=True)) 
 
     command_exec(f'''git fetch''', cwd=root, response=True)    
@@ -185,6 +186,8 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
         command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)                
     elif option == 2:
         print("En desarrollo...")
+        return
+    elif option == 3:
         return
     else:
         return
