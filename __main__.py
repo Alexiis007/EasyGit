@@ -11,6 +11,10 @@ import subprocess
 # Utilidades con ruteo y de mas
 import os
 
+# Para borrar carpeta en exit_clean()
+import shutil
+
+
 # Logger Config
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -446,8 +450,27 @@ def new_repo():
 
     return root, remote_root_token
 
-def exit_clean():
-    pretty_printer()
+def exit_clean(root:str):
+    pretty_printer("Salida borrara todo rastro del repo local")
+    pretty_printer("Asegurese de tener todos los cambios ya en el remoto")
+    pretty_printer("Esta seguro de continuar con la accion:")
+    pretty_printer("\t1- Si")
+    pretty_printer("\t2- No")
+    option = pretty_printer("R=", inputF=True)
+    print("-"*70)  
+
+    if option == 1:
+        if os.path.exists(root):
+            shutil.rmtree(root)
+            if not os.path.exists(root):
+                pretty_printer("Eliminacion completa...")
+        else:
+            pretty_printer("El archivo no existe !")
+    elif option == 2:
+        return
+    else:
+        return
+    
 
 def main():
     flag = True
