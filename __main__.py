@@ -330,17 +330,15 @@ def status(root:str, active_branch:str):
         pretty_printer("\tNo hay archivos nuevos detectados.")
         
 def hist_commits(root:str, active_branch:str):
-    pretty_printer(f"-> Historial de commits - {active_branch}:")    
-    
-    # hist_commits = command_exec("git log -5", cwd=root, response=True)
-    # # hist_commits.split("\n")
+    pretty_printer(f"Historial de commits - {active_branch}:")    
+    print("-"*70)  
 
-    # """count = 0
-    # for commit in hist_commits:
-    #     count+=1
-    #     pretty_printer(f"\t{count}- commit")"""
-    
-    # pretty_printer(hist_commits)
+    hist_commits = command_exec("git log -5", cwd=root, response=True)
+
+    if len(hist_commits) > 0:
+        pretty_printer(hist_commits)
+    else:
+        pretty_printer("Nada por mostrar...")
 
 def merge(root:str, active_branch:str):
     # # logger.info("change_branch - Cambio de rama de trabajo.")
@@ -491,6 +489,7 @@ def main():
         status(root=root, active_branch=active_branch)                
         print("-"*70)  
         pretty_printer("Que deseas realizar:")    
+        print("-"*70)  
         pretty_printer("\t1- Cambiar rama de trabajo")
         pretty_printer("\t2- Realizar un commit")
         pretty_printer("\t3- Realizar un commit + push")
@@ -552,13 +551,13 @@ def main():
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
                 subprocess.run("cls", shell=True)               
-            # hist_commits()                
+            # hist_commits(root=root, active_branch=active_branch)                
             case 8:                
+                hist_commits(root=root, active_branch=active_branch)
                 pretty_printer(f"\nTarea finalizada con exito !")
                 print("-"*70)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)               
-
+                subprocess.run("cls", shell=True)                               
 
 if __name__ == "__main__":
     main()
