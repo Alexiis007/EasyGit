@@ -17,3 +17,7 @@ error de imports no identificados:
 
 cambio de nombre del exe:
     pyinstaller --onefile --name EasyGit main.py
+
+
+Comando final: 
+    pyinstaller --onefile --icon=nerv.ico --name EasyGit __main__.py

@@ -1,4 +1,4 @@
-('C:\\Users\\cjuarez\\Desktop\\EasyGit\\build\\__main__\\PYZ-00.pyz',
+('C:\\Users\\cjuarez\\Desktop\\EasyGit\\build\\EasyGit\\PYZ-00.pyz',
  [('_compat_pickle',
    'C:\\Users\\cjuarez\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\_compat_pickle.py',
    'PYMODULE'),
