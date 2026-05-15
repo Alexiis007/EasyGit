@@ -5,6 +5,8 @@ import os
 import base64
 import requests
 
+import pwinput
+
 from getpass import getpass
 
 from cryptography.fernet import Fernet
@@ -24,8 +26,9 @@ def save_token(user:str):
         return False
 
     # password personalizada
-    password = getpass(
-        "Ingrese una contraseña maestra:\n"
+    password = pwinput.pwinput(
+        prompt="Ingrese la contraseña maestra:\n",
+        mask="*"
     ).encode()
 
     # generar salt
@@ -90,8 +93,9 @@ def save_token(user:str):
     return True
 
 def get_token(user:str):    
-    password = getpass(
-        "Ingrese la contraseña maestra:\n"
+    password = pwinput.pwinput(
+        prompt="Ingrese la contraseña maestra:\n",
+        mask="*"
     ).encode()
 
     desktop = os.path.join(
@@ -141,7 +145,6 @@ def get_token(user:str):
     cipher = Fernet(key)
 
     try:
-
         token = cipher.decrypt(
             encrypted_token
         ).decode()
@@ -198,7 +201,6 @@ def vigenci_token(token:str):
 
     if response.status_code == 401:
         return False
-
     else:
         return True
     
