@@ -11,73 +11,8 @@ from tokens import *
 
 def main():    
     subprocess.run("color 0A", shell=True)                    
-    
-    token = ""
-    flag = True
 
-    while flag:
-        subprocess.run("cls", shell=True)        
-        nerv_art(2)        
-
-        print("-"*60)  
-        pretty_printer("Inicio de sesion")        
-        users = list_users()
-        pretty_printer("\t1- Iniciar sesion")
-        pretty_printer("\t2- Registrar un token usuario nuevo")
-        try:
-            option = int(pretty_printer("R=", inputF=True))
-            print("-"*60)  
-        except:
-            continue
-        
-        if option == 1:
-            user = pretty_printer("Ingrese el usuario git:\n", inputF=True)
-            
-            if user not in users:
-                pretty_printer(f"El usuario {user} no esta registrado aun !")
-                pretty_printer("Por favor intente primero registrarlo")
-                print("-"*60)  
-                pretty_printer("Presione enter para continuar", inputF=True)
-                continue
-        
-            token = get_token(user=user)                                    
-
-            if not vigenci_token(token=token):
-                pretty_printer("El token esta vencido !")
-                pretty_printer("Registrese de nuevo.")
-                print("-"*60)  
-                pretty_printer("Presione enter para continuar", inputF=True)
-                del_user(user=user) 
-                continue
-            else:
-                flag = False
-
-        elif option == 2:            
-            print("-"*60)  
-            pretty_printer("Registre su nueva sesion:")            
-            print("-"*60)  
-            
-            user = pretty_printer("Ingrese el usuario git:\n", inputF=True)
-
-            if user in users:
-                pretty_printer(f"El usuario {user} ya esta registrado !")
-                pretty_printer(f"Por favor solo inicie sesion.")
-                print("-"*60)  
-                pretty_printer("Presione enter para continuar", inputF=True)
-                continue
-
-            if not save_token(user=user):
-                pretty_printer("No puede registrar este token porque esta vencido !")
-                pretty_printer("Por favor intente de nuevo.")
-                print("-"*60)  
-                pretty_printer("Presione enter para continuar", inputF=True)
-                continue
-
-            pretty_printer("Usuario registrado con exito !")
-            pretty_printer("Ahora debere iniciar sesion con el.")
-            print("-"*60)  
-            pretty_printer("Presione enter para continuar", inputF=True)
-            continue        
+    token = sesions()    
 
     flag = True
     while flag:
@@ -99,22 +34,19 @@ def main():
         print("-"*60)  
         
         if working_option == 1:
-            root = get_workspace() 
-            remote = set_token(root=root, token=token)
-            flag = False
+            root = get_workspace()                         
+            remote = set_remote_token(root=root, token=token)
+            flag = False            
         elif working_option == 2:
-            root, remote = clone(token=token)        
-            print("-"*60)  
+            root, remote = clone(token=token)                    
             pretty_printer("Pulse enter para continuar:", inputF=True)                
             subprocess.run("cls", shell=True)
             flag = False
         elif working_option == 3:       
-            root, remote = new_repo(token=token) 
-            print("-"*60)  
+            root, remote = new_repo(token=token)             
             pretty_printer("Pulse enter para continuar:", inputF=True)                
             subprocess.run("cls", shell=True)
-            flag = False
-        print("-"*60)  
+            flag = False        
 
     update_local(root=root)            
     subprocess.run("cls", shell=True)                    

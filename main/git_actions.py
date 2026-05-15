@@ -49,7 +49,7 @@ def get_workspace():
 
     return root
 
-def set_token(root:str, token:str):
+def set_remote_token(root:str, token:str):
     # logger.info("setToken - Establecimiento del token.")
     # print("-"*60)
 
@@ -406,6 +406,8 @@ def new_repo(token:str):
     command_exec(f"git remote add origin {remote_root_token}", cwd=root, response=True)
     command_exec("git branch -M main", cwd=root, response=True)
     command_exec(f"git push --force {remote_root_token} main ", cwd=root, response=True)
+
+    print("-"*60)  
 
     return root, remote_root_token
 

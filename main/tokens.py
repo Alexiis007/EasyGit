@@ -15,7 +15,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 from cryptography.hazmat.primitives import hashes
 
-def save_token(user:str):
+def set_token(user:str):
 
     token = pretty_printer(
         "Ingrese el token del usuario:\n",
@@ -231,3 +231,75 @@ def del_user(user:str):
     if os.path.exists(file_salt):
         os.remove(file_salt)        
 
+def sesions():
+    
+    token = ""
+    flag = True
+
+    while flag:
+        subprocess.run("cls", shell=True)        
+        nerv_art(2)        
+
+        print("-"*60)  
+        pretty_printer("Inicio de sesion")        
+
+        users = list_users()
+        
+        pretty_printer("\t1- Iniciar sesion")
+        pretty_printer("\t2- Registrar un token usuario nuevo")
+        try:
+            option = int(pretty_printer("R=", inputF=True))
+            print("-"*60)  
+        except:
+            continue
+        
+        if option == 1:
+            user = pretty_printer("Ingrese el usuario git:\n", inputF=True)
+            
+            if user not in users:
+                pretty_printer(f"El usuario {user} no esta registrado aun !")
+                pretty_printer("Por favor intente primero registrarlo")
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                continue
+        
+            token = get_token(user=user)                                    
+
+            if not vigenci_token(token=token):
+                pretty_printer("El token esta vencido !")
+                pretty_printer("Registrese de nuevo.")
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                del_user(user=user) 
+                continue
+            else:
+                flag = False
+
+        elif option == 2:            
+            print("-"*60)  
+            pretty_printer("Registre su nueva sesion:")            
+            print("-"*60)  
+            
+            user = pretty_printer("Ingrese el usuario git:\n", inputF=True)
+
+            if user in users:
+                pretty_printer(f"El usuario {user} ya esta registrado !")
+                pretty_printer(f"Por favor solo inicie sesion.")
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                continue
+
+            if not set_token(user=user):
+                pretty_printer("No puede registrar este token porque esta vencido !")
+                pretty_printer("Por favor intente de nuevo.")
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                continue
+
+            pretty_printer("Usuario registrado con exito !")
+            pretty_printer("Ahora debere iniciar sesion con el.")
+            print("-"*60)  
+            pretty_printer("Presione enter para continuar", inputF=True)
+            continue     
+
+    return token   
