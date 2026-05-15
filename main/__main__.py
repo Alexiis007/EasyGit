@@ -67,7 +67,9 @@ def main():
         pretty_printer("\t5- Borrar rama")
         pretty_printer("\t6- Realizar merge")        
         pretty_printer("\t7- Salida Limpia (Experimental)")   
-        pretty_printer("\t8- Historial de commits")        
+        pretty_printer("\t8- Historial de commits")       
+        pretty_printer("\t9- Abrir en explorador de Windows")        
+        # pretty_printer("\t10- Ejecurar comando - Terminal directa")        
         pretty_printer("\t0- Regresar al menu anterior")        
         option = int(pretty_printer("R=", inputF=True))
         print("-"*60)  
@@ -144,7 +146,21 @@ def main():
                 pretty_printer(f"Tarea finalizada con exito !")
                 print("-"*60)  
                 pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)          
+                subprocess.run("cls", shell=True)        
+            # command_exec("explorer .", cwd=root)         
+            case 9:                
+                command_exec("explorer .", cwd=root)
+                subprocess.run("cls", shell=True) 
+            # case 10:                
+            #     command = str(pretty_printer("Ingrese comando:\n", inputF=True))
+            #     res = command_exec(command, cwd=root, response=True)
+            #     pretty_printer(res)
+            #     subprocess.run("cls", shell=True)     
+            #     print("-"*60)  
+            #     pretty_printer(f"Tarea finalizada con exito !")
+            #     print("-"*60)  
+            #     pretty_printer("Pulse enter para continuar:", inputF=True)                
+            #     subprocess.run("cls", shell=True)   
             case 0:                
                 main()                           
 
