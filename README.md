@@ -20,4 +20,4 @@ cambio de nombre del exe:
 
 
 Comando final: 
-    pyinstaller --onefile --icon=nerv.ico --name EasyGit __main__.py
+    pyinstaller --onefile --icon=.\assets\nerv.ico --name EasyGit .\main\__main__.py

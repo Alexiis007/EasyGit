@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['__main__.py'],
+    ['main\\__main__.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -35,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['nerv.ico'],
+    icon=['assets\\nerv.ico'],
 )
