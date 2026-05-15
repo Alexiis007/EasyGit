@@ -71,6 +71,7 @@ def main():
             "7- Salida Limpia (Experimental)",
             "8- Historial de commits",
             "9- Abrir explorador de Windows",
+            "10- Actualizar Ventana",
             "0- Cerrar sesion"
         ]
 
@@ -78,12 +79,15 @@ def main():
         for i in options:            
             if count == 0:
                 line = i    
-                count += 1
+                count += 1                
+                if count == 1 and i == options[-1]:                                
+                    pretty_printer(f"{line}")                    
             elif count == 1:                
                 line += f" "*(35-len(line))
                 pretty_printer(f"{line}{i}")
                 count = 0                            
-   
+
+        print("-"*60)  
         option = int(pretty_printer("R=", inputF=True))
         print("-"*60)  
 
@@ -163,6 +167,8 @@ def main():
             # command_exec("explorer .", cwd=root)         
             case 9:                
                 command_exec("explorer .", cwd=root)
+                subprocess.run("cls", shell=True) 
+            case 10:                                
                 subprocess.run("cls", shell=True) 
             case 0:                
                 main()                           
