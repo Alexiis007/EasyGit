@@ -140,14 +140,17 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
     command_exec(f'''git fetch''', cwd=root, response=True)    
 
     if option == 1:
-        commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)            
+        print("-"*60)
+        commit = pretty_printer(f"Denos un mensaje de commit:\n", inputF=True)            
         command_exec(f'''git add .''', cwd=root)
         command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)                
     elif option == 2:
-        files = str(pretty_printer("Separados por espacios ingrese los archivos que desea guardar:", inputF=True))
+        print("-"*60)
+        files = str(pretty_printer("Separados por espacios ingrese los archivos que desea guardar:\n", inputF=True))
         command_exec(f'''git add {files}''', cwd=root)
 
-        commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)            
+        print("-"*60)
+        commit = pretty_printer(f"Denos un mensaje de commit:\n", inputF=True)            
         command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)     
     elif option == 3:
         return
