@@ -83,17 +83,7 @@ def main():
                 line += f" "*(35-len(line))
                 pretty_printer(f"{line}{i}")
                 count = 0                            
-
-        # pretty_printer("\t1- Cambiar rama de trabajo")
-        # pretty_printer("\t2- Realizar un commit")
-        # pretty_printer("\t3- Realizar un commit + push")
-        # pretty_printer("\t4- Crear rama a partir de otra")
-        # pretty_printer("\t5- Borrar rama")
-        # pretty_printer("\t6- Realizar merge")        
-        # pretty_printer("\t7- Salida Limpia (Experimental)")   
-        # pretty_printer("\t8- Historial de commits")       
-        # pretty_printer("\t9- Abrir en explorador de Windows")                       
-        # pretty_printer("\t0- Regresar al menu anterior")        
+   
         option = int(pretty_printer("R=", inputF=True))
         print("-"*60)  
 
