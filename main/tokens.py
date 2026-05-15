@@ -3,6 +3,7 @@ from tools import *
 
 import os
 import base64
+import requests
 
 from getpass import getpass
 
@@ -12,17 +13,15 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 from cryptography.hazmat.primitives import hashes
 
-def set_token():
-
-    user = pretty_printer(
-        "Ingrese el usuario git:\n",
-        inputF=True
-    )
+def save_token(user:str):
 
     token = pretty_printer(
         "Ingrese el token del usuario:\n",
         inputF=True
     )
+
+    if not vigenci_token(token=token):        
+        return False
 
     # password personalizada
     password = getpass(
@@ -88,17 +87,9 @@ def set_token():
 
         f.write(salt)
 
-    pretty_printer(
-        "Token cifrado y almacenado correctamente."
-    )
+    return True
 
-def get_token():    
-    user = pretty_printer(
-        "Ingrese el usuario git:\n",
-        inputF=True
-    )
-
-
+def get_token(user:str):    
     password = getpass(
         "Ingrese la contraseña maestra:\n"
     ).encode()
@@ -156,8 +147,85 @@ def get_token():
         ).decode()
 
         pretty_printer(f"Clave correcta !!")
-        pretty_printer(f"Token: {token}")
+        return token
 
     except:
         pretty_printer("Contraseña incorrecta.")        
+        return None
     
+def list_users():
+    print("-"*60)  
+    pretty_printer("Usuarios Registrados:")
+    print("-"*60)  
+    desktop = os.path.join(
+        os.path.expanduser("~"),
+        "Desktop"
+    )
+
+    credentials_folder = os.path.join(
+        desktop,
+        "credentials"
+    )
+
+    name_users = []
+
+    if os.path.exists(credentials_folder):
+        users = command_exec("dir /a", cwd=credentials_folder, response=True)        
+        users = users.split("\n")
+
+        count = 0
+        for user in users:
+            if ".key" in user:
+                count+=1
+                user = user.split(" ")[-1]                
+                pretty_printer(f"\t{count}- {user.replace(".key", "")}")
+                name_users.append(user.replace(".key", ""))
+    else:
+        pretty_printer("\tNingun usuario registrado")                        
+    print("-"*60)  
+
+    return name_users
+
+def vigenci_token(token:str):
+    headers = {
+        "Authorization": f"token {token}"
+    }
+
+    response = requests.get(
+        "https://api.github.com/user",
+        headers=headers
+    )    
+
+    if response.status_code == 401:
+        return False
+
+    else:
+        return True
+    
+def del_user(user:str):
+    desktop = os.path.join(
+        os.path.expanduser("~"),
+        "Desktop"
+    )
+
+    credentials_folder = os.path.join(
+        desktop,
+        "credentials"
+    )
+
+    file_key = os.path.join(
+        credentials_folder,
+        "user.key"
+    )
+
+    file_salt = os.path.join(
+        credentials_folder,
+        "user.salt"
+    )
+
+    if os.path.exists(file_key):
+        os.remove(file_key)
+
+    if os.path.exists(file_salt):
+        os.remove(file_salt)        
+

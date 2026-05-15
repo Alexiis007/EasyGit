@@ -49,7 +49,7 @@ def get_workspace():
 
     return root
 
-def set_token(root:str):
+def set_token(root:str, token:str):
     # logger.info("setToken - Establecimiento del token.")
     # print("-"*60)
 
@@ -67,7 +67,7 @@ def set_token(root:str):
     command_exec(f""" git config user.name "{user}" """, cwd=root)
     command_exec(f""" git config user.email "{user}@github.com" """, cwd=root)
 
-    token = pretty_printer(f"Ingrese token de trabajo para el usuario {user}:\n", inputF=True)        
+    # token = pretty_printer(f"Ingrese token de trabajo para el usuario {user}:\n", inputF=True)        
 
     # Si el remote_root (origin) fue registrado con un token en algun momento
     # Cambiamos el token clavado por el ingresado en dado caso de que este vencido
@@ -333,10 +333,10 @@ def merge(root:str, active_branch:str):
     pretty_printer("Existe la posibilidad de conflictos posteriores,\nlos cuales debes resolver en tu editor VS.")
     pretty_printer(f"La rama {merge} al finalizar el merge seguira existiendo,\nesta la puedes borrar despues")
 
-def clone():
+def clone(token:str):
     https = pretty_printer("Ingrese el HTTPS de su repo: ", inputF=True)
     user = pretty_printer("Ingrese el nombre de su usuario en git: ", inputF=True)
-    token = pretty_printer("Ingrese el token de su sesion git: ", inputF=True)    
+    # token = pretty_printer("Ingrese el token de su sesion git: ", inputF=True)    
 
     repo_name = https.split("/")[-1].replace(".git", "")
     
@@ -368,10 +368,10 @@ def clone():
 
     return root, remote_root_token
     
-def new_repo():
+def new_repo(token:str):
     https = pretty_printer("Ingrese el HTTPS de su nuevo repo (Antes creelo en git): ", inputF=True)
     user = pretty_printer("Ingrese el nombre de su usuario en git: ", inputF=True)
-    token = pretty_printer("Ingrese el token de su sesion git: ", inputF=True)    
+    # token = pretty_printer("Ingrese el token de su sesion git: ", inputF=True)    
 
     repo_name = https.split("/")[-1].replace(".git", "")
     remote_root_token = https.replace("github.com", f"{user}:{token}@github.com") 

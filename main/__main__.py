@@ -7,16 +7,86 @@ from tools import *
 # Importacion de funciones git
 from git_actions import *
 
+from tokens import *
+
 def main():    
-    subprocess.run("color 0A", shell=True)                
+    subprocess.run("color 0A", shell=True)                    
+    
+    token = ""
+    flag = True
+
+    while flag:
+        subprocess.run("cls", shell=True)        
+        nerv_art(2)        
+
+        print("-"*60)  
+        pretty_printer("Inicio de sesion")        
+        users = list_users()
+        pretty_printer("\t1- Registrar un token usuario nuevo")
+        pretty_printer("\t2- Iniciar sesion")
+        try:
+            option = int(pretty_printer("R=", inputF=True))
+        except:
+            option = ""
+
+        if option == 1:            
+            print("-"*60)  
+            pretty_printer("Registre su nueva sesion:")            
+            print("-"*60)  
+            
+            user = pretty_printer("Ingrese el usuario git:\n", inputF=True)
+
+            if user in users:
+                pretty_printer(f"El usuario {user} ya esta registrado !")
+                pretty_printer(f"Por favor solo inicie sesion.")
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                continue
+
+            if not save_token(user=user):
+                pretty_printer("No puede registrar este token porque esta vencido !")
+                pretty_printer("Por favor intente de nuevo.")
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                continue
+
+            pretty_printer("Usuario registrado con exito !")
+            pretty_printer("Ahora debere iniciar sesion con el.")
+            print("-"*60)  
+            pretty_printer("Presione enter para continuar", inputF=True)
+            continue
+
+        elif option == 2:
+            user = pretty_printer("Ingrese el usuario git:\n", inputF=True)
+            
+            if user not in users:
+                pretty_printer(f"El usuario {user} no esta registrado aun !")
+                pretty_printer("Por favor intente primero registrarlo")
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                continue
+        
+            token = get_token(user=user)                                    
+
+            if not vigenci_token(token=token):
+                pretty_printer("El token esta vencido !")
+                pretty_printer("Registrese de nuevo.")
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                del_user(user=user) 
+                continue
+            else:
+                flag = False
+
 
     flag = True
     while flag:
-        subprocess.run("cls", shell=True)                
-        
-        nerv_art(2)
-        
+        subprocess.run("cls", shell=True)                        
+
+        nerv_art(2)        
+
         print("-"*60)  
+
         pretty_printer("Iniciar en repo existente o crear un espacio nuevo:")
         pretty_printer("\t1- Trabajar sobre un repo local existente")
         pretty_printer("\t2- Crear un espacio nuevo (Clonacion de repo)")
@@ -30,16 +100,16 @@ def main():
         
         if working_option == 1:
             root = get_workspace() 
-            remote = set_token(root=root)
+            remote = set_token(root=root, token=token)
             flag = False
         elif working_option == 2:
-            root, remote = clone()        
+            root, remote = clone(token=token)        
             print("-"*60)  
             pretty_printer("Pulse enter para continuar:", inputF=True)                
             subprocess.run("cls", shell=True)
             flag = False
         elif working_option == 3:       
-            root, remote = new_repo() 
+            root, remote = new_repo(token=token) 
             print("-"*60)  
             pretty_printer("Pulse enter para continuar:", inputF=True)                
             subprocess.run("cls", shell=True)
