@@ -330,8 +330,9 @@ def merge(root:str, active_branch:str):
 
     command_exec(f"git merge {merge}", cwd=root, response=True)
 
-    pretty_printer("Existe la posibilidad de conflictos posteriores,\nlos cuales debes resolver en tu editor VS.")
-    pretty_printer(f"La rama {merge} al finalizar el merge seguira existiendo,\nesta la puedes borrar despues")
+    pretty_printer(f"-> Existe la posibilidad de conflictos posteriores,\nlos cuales debes resolver en tu editor VS.")
+    pretty_printer(f"-> La rama {merge} al finalizar el merge seguira existiendo,\nesta la puedes borrar despues")
+    pretty_printer(f"-> Recuerda hacer un push de tu rama {branch}")
 
 def clone(token:str):
     https = pretty_printer("Ingrese el HTTPS de su repo: ", inputF=True)
