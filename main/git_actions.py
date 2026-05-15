@@ -167,7 +167,7 @@ def new_branch(root:str, remote:str):
     command_exec(f'''git switch {branch}''', cwd=root, response=True)
     update_local(root=root)      
 
-    new_branch = pretty_printer("Que nombre deseas ponerle a esta nueva rama: ", inputF=True)    
+    new_branch = str(pretty_printer("Que nombre deseas ponerle a esta nueva rama: ", inputF=True)).strip().replace(" ", "")
 
     command_exec(f"git switch -c {new_branch}", cwd=root, response=True)
     update_local(root=root)      

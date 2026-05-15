@@ -60,17 +60,40 @@ def main():
         print("-"*60)  
         pretty_printer("Que deseas realizar:")    
         print("-"*60)  
-        pretty_printer("\t1- Cambiar rama de trabajo")
-        pretty_printer("\t2- Realizar un commit")
-        pretty_printer("\t3- Realizar un commit + push")
-        pretty_printer("\t4- Crear rama a partir de otra")
-        pretty_printer("\t5- Borrar rama")
-        pretty_printer("\t6- Realizar merge")        
-        pretty_printer("\t7- Salida Limpia (Experimental)")   
-        pretty_printer("\t8- Historial de commits")       
-        pretty_printer("\t9- Abrir en explorador de Windows")        
-        # pretty_printer("\t10- Ejecurar comando - Terminal directa")        
-        pretty_printer("\t0- Regresar al menu anterior")        
+
+        options = [
+            "1- Cambiar rama de trabajo",
+            "2- Realizar un commit",
+            "3- Realizar un commit + push",
+            "4- Crear una rama",
+            "5- Borrar rama",
+            "6- Realizar merge",
+            "7- Salida Limpia (Experimental)",
+            "8- Historial de commits",
+            "9- Abrir explorador de Windows",
+            "0- Cerrar sesion"
+        ]
+
+        count = 0
+        for i in options:            
+            if count == 0:
+                line = i    
+                count += 1
+            elif count == 1:                
+                line += f" "*(35-len(line))
+                pretty_printer(f"{line}{i}")
+                count = 0                            
+
+        # pretty_printer("\t1- Cambiar rama de trabajo")
+        # pretty_printer("\t2- Realizar un commit")
+        # pretty_printer("\t3- Realizar un commit + push")
+        # pretty_printer("\t4- Crear rama a partir de otra")
+        # pretty_printer("\t5- Borrar rama")
+        # pretty_printer("\t6- Realizar merge")        
+        # pretty_printer("\t7- Salida Limpia (Experimental)")   
+        # pretty_printer("\t8- Historial de commits")       
+        # pretty_printer("\t9- Abrir en explorador de Windows")                       
+        # pretty_printer("\t0- Regresar al menu anterior")        
         option = int(pretty_printer("R=", inputF=True))
         print("-"*60)  
 
@@ -151,16 +174,6 @@ def main():
             case 9:                
                 command_exec("explorer .", cwd=root)
                 subprocess.run("cls", shell=True) 
-            # case 10:                
-            #     command = str(pretty_printer("Ingrese comando:\n", inputF=True))
-            #     res = command_exec(command, cwd=root, response=True)
-            #     pretty_printer(res)
-            #     subprocess.run("cls", shell=True)     
-            #     print("-"*60)  
-            #     pretty_printer(f"Tarea finalizada con exito !")
-            #     print("-"*60)  
-            #     pretty_printer("Pulse enter para continuar:", inputF=True)                
-            #     subprocess.run("cls", shell=True)   
             case 0:                
                 main()                           
 
