@@ -37,3 +37,6 @@ Verifica
     python -c "import modulo; print('ok')"
 
 
+---- > Error si la hora del PC no esta bien
+---- > Errore porque Git no esta instalado
+---- > Agregar acceso rapido (opcion) de crear un repo en esccritorio 
