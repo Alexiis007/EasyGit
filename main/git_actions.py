@@ -106,6 +106,7 @@ def change_branch(root:str, remote:str, active_branch:str):
 
     pretty_printer("A que rama desea cambiar:")
     branch = pretty_printer("Opcion: ", inputF=True)
+    print("-"*60)
 
     pretty_printer(f"Esta cambiando de la rama {active_branch} a la rama {branch}.")
     pretty_printer(f"Antes es necesario guardar los cambios de su rama activa actual...")
@@ -114,16 +115,28 @@ def change_branch(root:str, remote:str, active_branch:str):
     pretty_printer(f"\t3- Si ya todo esta guardado, solo continuemos")
     option = int(pretty_printer(f"Opcion:", inputF=True))
 
-    if option == 1:
-        return
-    elif option == 2:
-        commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)
-        command_exec(f'''git add .''', cwd=root)
-        command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)
-        command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
-        command_exec(f'''git switch {branch}''', cwd=root, response=True)
-    else:
-        command_exec(f'''git switch {branch}''', cwd=root, response=True)
+    flag = True
+    while flag:        
+        if option == 1:
+            return
+        elif option == 2:
+            commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)
+            command_exec(f'''git add .''', cwd=root)
+            command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)
+            command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
+            command_exec(f'''git switch {branch}''', cwd=root, response=True)
+            flag = False
+        elif option == 3:
+            res = command_exec(f'''git switch {branch}''', cwd=root, response=True)
+            if "Please commit your changes" in res:
+                print("-"*60)
+                pretty_printer("Tienes cambios no commiteados...")
+                pretty_printer("Seras regresado al menu, reviza bien tus cambios.")
+            flag = False
+        else:        
+            print("-"*60)    
+            pretty_printer("Solo se pueden las opciones mostradas !")
+            option = int(pretty_printer(f"Opcion:", inputF=True))
 
     update_local(root=root)        
 
@@ -140,14 +153,17 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
     command_exec(f'''git fetch''', cwd=root, response=True)    
 
     if option == 1:
-        commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)            
+        print("-"*60)
+        commit = pretty_printer(f"Denos un mensaje de commit:\n", inputF=True)            
         command_exec(f'''git add .''', cwd=root)
         command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)                
     elif option == 2:
-        files = str(pretty_printer("Separados por espacios ingrese los archivos que desea guardar:", inputF=True))
+        print("-"*60)
+        files = str(pretty_printer("Separados por espacios ingrese los archivos que desea guardar:\n", inputF=True))
         command_exec(f'''git add {files}''', cwd=root)
 
-        commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)            
+        print("-"*60)
+        commit = pretty_printer(f"Denos un mensaje de commit:\n", inputF=True)            
         command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)     
     elif option == 3:
         return
@@ -167,7 +183,7 @@ def new_branch(root:str, remote:str):
     command_exec(f'''git switch {branch}''', cwd=root, response=True)
     update_local(root=root)      
 
-    new_branch = pretty_printer("Que nombre deseas ponerle a esta nueva rama: ", inputF=True)    
+    new_branch = str(pretty_printer("Que nombre deseas ponerle a esta nueva rama: ", inputF=True)).strip().replace(" ", "")
 
     command_exec(f"git switch -c {new_branch}", cwd=root, response=True)
     update_local(root=root)      
@@ -252,7 +268,14 @@ def status(root:str, active_branch:str):
             
     commits_not_stage = []
     untracked_files = []
+    data_ignore = [
+        "__pycache__",
+        "dist",
+        "build",
+        "venv"
+    ]
 
+    # Llenado de listados de cambios y archivos nuevos
     status = command_exec("git status", cwd=root, response=True)
     if len(status) > 0:
         status = status.split("\n")
@@ -273,10 +296,22 @@ def status(root:str, active_branch:str):
                         break                        
             count+=1        
     else:
-        pretty_printer("Historial de commmits vacio...")
-        
-    pretty_printer(f"-> Archivos modificados({len(commits_not_stage)}) - {active_branch}:")    
+        pretty_printer("No se tiene nungun status...")
     
+    # Eliminación de elementos ignore. [:] crea una copia de el array
+    for line in commits_not_stage[:]:
+        for ignore in data_ignore:
+            if ignore in line:
+                commits_not_stage.remove(line)
+
+    for line in untracked_files[:]:
+        for ignore in data_ignore:
+            if ignore in line:
+                untracked_files.remove(line)
+        
+    # Listado de archivos modificados    
+    pretty_printer(f"-> Archivos modificados({len(commits_not_stage)}) - {active_branch}:")    
+        
     count = 0
     for i in commits_not_stage:
         count+=1
@@ -284,6 +319,7 @@ def status(root:str, active_branch:str):
     if count == 0:
         pretty_printer("\tNo hay archivos modificados.")
     
+    # Listado de archivos nuevos
     pretty_printer(f"\n-> Archivos nuevos creados({len(untracked_files)}) - {active_branch}:")    
     
     count = 0
