@@ -106,6 +106,7 @@ def change_branch(root:str, remote:str, active_branch:str):
 
     pretty_printer("A que rama desea cambiar:")
     branch = pretty_printer("Opcion: ", inputF=True)
+    print("-"*60)
 
     pretty_printer(f"Esta cambiando de la rama {active_branch} a la rama {branch}.")
     pretty_printer(f"Antes es necesario guardar los cambios de su rama activa actual...")
@@ -114,16 +115,28 @@ def change_branch(root:str, remote:str, active_branch:str):
     pretty_printer(f"\t3- Si ya todo esta guardado, solo continuemos")
     option = int(pretty_printer(f"Opcion:", inputF=True))
 
-    if option == 1:
-        return
-    elif option == 2:
-        commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)
-        command_exec(f'''git add .''', cwd=root)
-        command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)
-        command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
-        command_exec(f'''git switch {branch}''', cwd=root, response=True)
-    else:
-        command_exec(f'''git switch {branch}''', cwd=root, response=True)
+    flag = True
+    while flag:        
+        if option == 1:
+            return
+        elif option == 2:
+            commit = pretty_printer(f"Denos un mensaje de commit:", inputF=True)
+            command_exec(f'''git add .''', cwd=root)
+            command_exec(f'''git commit -m "{commit}"''', cwd=root, response=True)
+            command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
+            command_exec(f'''git switch {branch}''', cwd=root, response=True)
+            flag = False
+        elif option == 3:
+            res = command_exec(f'''git switch {branch}''', cwd=root, response=True)
+            if "Please commit your changes" in res:
+                print("-"*60)
+                pretty_printer("Tienes cambios no commiteados...")
+                pretty_printer("Seras regresado al menu, reviza bien tus cambios.")
+            flag = False
+        else:        
+            print("-"*60)    
+            pretty_printer("Solo se pueden las opciones mostradas !")
+            option = int(pretty_printer(f"Opcion:", inputF=True))
 
     update_local(root=root)        
 

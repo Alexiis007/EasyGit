@@ -231,7 +231,7 @@ def del_user(user:str):
     if os.path.exists(file_salt):
         os.remove(file_salt)        
 
-def sesions():
+def sessions():
     
     token = ""
     flag = True

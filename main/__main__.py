@@ -12,7 +12,7 @@ from tokens import *
 def main():    
     subprocess.run("color 0A", shell=True)                    
 
-    token = sesions()    
+    token = sessions()    
 
     flag = True
     while flag:
