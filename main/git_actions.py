@@ -255,7 +255,14 @@ def status(root:str, active_branch:str):
             
     commits_not_stage = []
     untracked_files = []
+    data_ignore = [
+        "__pycache__",
+        "dist",
+        "build",
+        "venv"
+    ]
 
+    # Llenado de listados de cambios y archivos nuevos
     status = command_exec("git status", cwd=root, response=True)
     if len(status) > 0:
         status = status.split("\n")
@@ -276,10 +283,22 @@ def status(root:str, active_branch:str):
                         break                        
             count+=1        
     else:
-        pretty_printer("Historial de commmits vacio...")
-        
-    pretty_printer(f"-> Archivos modificados({len(commits_not_stage)}) - {active_branch}:")    
+        pretty_printer("No se tiene nungun status...")
     
+    # Eliminación de elementos ignore. [:] crea una copia de el array
+    for line in commits_not_stage[:]:
+        for ignore in data_ignore:
+            if ignore in line:
+                commits_not_stage.remove(line)
+
+    for line in untracked_files[:]:
+        for ignore in data_ignore:
+            if ignore in line:
+                untracked_files.remove(line)
+        
+    # Listado de archivos modificados    
+    pretty_printer(f"-> Archivos modificados({len(commits_not_stage)}) - {active_branch}:")    
+        
     count = 0
     for i in commits_not_stage:
         count+=1
@@ -287,6 +306,7 @@ def status(root:str, active_branch:str):
     if count == 0:
         pretty_printer("\tNo hay archivos modificados.")
     
+    # Listado de archivos nuevos
     pretty_printer(f"\n-> Archivos nuevos creados({len(untracked_files)}) - {active_branch}:")    
     
     count = 0
