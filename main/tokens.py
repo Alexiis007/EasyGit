@@ -148,12 +148,9 @@ def get_token(user:str):
         token = cipher.decrypt(
             encrypted_token
         ).decode()
-
-        pretty_printer(f"Clave correcta !!")
+        
         return token
-
-    except:
-        pretty_printer("Contraseña incorrecta.")        
+    except:        
         return None
     
 def list_users():
@@ -263,7 +260,13 @@ def sessions():
                 pretty_printer("Presione enter para continuar", inputF=True)
                 continue
         
-            token = get_token(user=user)                                    
+            token = get_token(user=user)     
+
+            if token is None:                
+                pretty_printer("Clave incorrecta !!")   
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                continue                           
 
             if not vigenci_token(token=token):
                 pretty_printer("El token esta vencido !")

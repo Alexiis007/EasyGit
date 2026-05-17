@@ -29,20 +29,19 @@ def get_workspace():
             pretty_printer("Ruta erronea !!!")
             print("-"*60)
         
-    pretty_printer("Verificando la existencia del archivo .git")
+    # pretty_printer("Verificando la existencia del archivo .git")
     
     list_dir = command_exec("dir /a", cwd=root, response=True)
 
+    print("-"*60)
     if not ".git" in list_dir:
         command_exec("cls", root)
-        logger.error("get_workspace - Obtencion de espacio de trabajo. Ruta incorrecta.")
-        print("-"*60)
-        pretty_printer("La ruta de trabajo establecida no contiene una archivo .git.")
+        # logger.error("get_workspace - Obtencion de espacio de trabajo. Ruta incorrecta.")        
+        pretty_printer("La ruta establecida no contiene una archivo .git.")
         pretty_printer("Por favor intente de nuevo.")
         print("-"*60)
         get_workspace()
-    else:
-        pretty_printer("Archivo .git encontrado.")
+    else:                
         pretty_printer("Ruta establecida !")                
 
     print("-"*60)
@@ -82,6 +81,8 @@ def set_remote_token(root:str, token:str):
 def get_branches(root:str):
     # logger.info("get_branches - Obtencion de ramas en el repositorio remoto.")
     # print("-"*60)
+
+    update_local(root=root)
 
     pretty_printer("Ramas existentes en el espacio de trabajo:")   
     print("-"*60) 
@@ -197,8 +198,8 @@ def new_branch(root:str, remote:str):
 def update_local(root:str):
     # # logger.info("change_branch - Cambio de rama de trabajo.")
     # # print("-"*60)
-    command_exec(f'''git fetch''', cwd=root, response=True)
-    command_exec(f'''git pull''', cwd=root, response=True)    
+    command_exec(f'''git fetch --all --prune''', cwd=root, response=True)
+    command_exec(f'''git pull --prune''', cwd=root, response=True)    
 
 def del_branch(root:str, remote:str, active_branch:str):
     # # logger.info("change_branch - Cambio de rama de trabajo.")

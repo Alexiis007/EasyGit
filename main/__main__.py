@@ -17,9 +17,7 @@ def main():
     flag = True
     while flag:
         subprocess.run("cls", shell=True)                        
-
         nerv_art(2)        
-
         print("-"*60)  
 
         pretty_printer("Iniciar en repo existente o crear un espacio nuevo:")
