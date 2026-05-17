@@ -85,3 +85,26 @@ def command_exec(command:str, cwd:str, response:bool = False):
             pretty_printer(f"Error al ejecutar el comando '{command}'...")
             return None
         return f"{output.stdout}\n{output.stderr}"
+
+def only_int_options(max_number_option:int, zero_start:bool=False):    
+    start = 1
+    
+    if zero_start:
+        start = 0
+
+    while True:
+        try:
+            option = int(pretty_printer("R=", inputF=True))            
+            
+            if option < start or option > max_number_option:
+                print("-"*60)
+                pretty_printer(f"Solo numeros del {start} al {max_number_option} !")                
+                print("-"*60)
+            else:
+                return option
+        except:
+            print("-"*60)            
+            pretty_printer(f"Solo numeros por favor !")
+            print("-"*60)
+    
+        

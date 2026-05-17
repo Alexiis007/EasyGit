@@ -84,22 +84,23 @@ def get_branches(root:str):
 
     update_local(root=root)
 
-    pretty_printer("Ramas existentes en el espacio de trabajo:")   
-    print("-"*60) 
-
     res = command_exec("git branch -a", response=True, cwd=root)
-    
+
     active_branch = ""
+    branches = []    
 
     for i in res.split('\n'):
-        if len(str(i)) > 0:
-            pretty_printer(f"- {i}")
+        if len(str(i)) > 0:            
+            branches.append(i)
         if "*" in i:
-            active_branch = i.split(" ")[-1]
-        
-    pretty_printer(f"\n->  Rama activa: {active_branch}")    
+            active_branch = i.split(" ")[-1]            
 
-    return active_branch
+    data_branches = {
+        "active_branch": active_branch,
+        "branches": branches
+    }
+
+    return data_branches
 
 def change_branch(root:str, remote:str, active_branch:str):
     # # logger.info("change_branch - Cambio de rama de trabajo.")
@@ -203,45 +204,69 @@ def update_local(root:str):
 
 def del_branch(root:str, remote:str, active_branch:str):
     # # logger.info("change_branch - Cambio de rama de trabajo.")
-    # # print("-"*60)
+    # # print("-"*60)    
 
     update_local(root=root)
 
     branch = pretty_printer("Que rama deseas borrar: ", inputF=True)   
+    branch = branch.split("/")[-1].strip()
 
-    denied = ["main", "master", "origin"]
+    denied = ["main", "master"]
+    branches = get_branches(root=root)["branches"]
 
     if branch.lower() in denied:
-        pretty_printer("No puedes eliminar main...")
+        pretty_printer(f"No puedes eliminar {branch}...")
         return
-    
-    if active_branch == branch:
+    elif active_branch == branch:
         pretty_printer(f"No puedes borrar {branch} porque actualmente estas en ella...") 
         return
 
-    pretty_printer(f"Estas seguro de que deseas eliminar la rama {branch}:")
+    pretty_printer(f"Realmente quieres borrar {branch}:")
     pretty_printer("\t1- Si, continuar")
     pretty_printer("\t2- No, regresar")
-    option = int(pretty_printer("R=", inputF=True))
+    option = only_int_options(max_number_option=2) 
+
+    flag_remote_del = False
+
+    for branch_line in branches:
+        branch_line = branch_line.split("/")        
+
+        if "remotes" == branch_line[0].strip() and branch == branch_line[-1].strip():
+            pretty_printer(f"Se detecto que {branch} es una rama existente en el remoto")             
+            pretty_printer(f"Deseas continuar con la eliminacion:")      
+            pretty_printer("\t1- Si, continuar")
+            pretty_printer("\t2- No, regresar")    
+            option_remote_del = only_int_options(max_number_option=2) 
+
+            if option_remote_del == 1:
+                flag_remote_del = True
+            elif option_remote_del == 2:
+                return
 
     if option == 1:
-        res = command_exec(f"git branch -d {branch}", cwd=root, response=True)           
+        if flag_remote_del:
+            res = command_exec(f"git push {remote} --delete {branch}", cwd=root, response=True)
+        else:
+            res = command_exec(f"git branch -d {branch}", cwd=root, response=True)           
 
-        if "git branch -D" in res:
+        if "is not fully merged" in res:
             print("-"*60)
-            pretty_printer(f"Ojo ! {branch} tiene commits que probablemente no exitan en main")
+            pretty_printer(f"{branch} tiene commits que no existen en main")
             pretty_printer("\t1- Salir y revizar esos commits")
             pretty_printer("\t2- Forzar eliminacion de la rama")
             option = int(pretty_printer("R= ", inputF=True))
 
             if option == 2:
-                command_exec(f"git branch -D {branch}", cwd=root, response=True)   
+                if flag_remote_del:
+                    res = command_exec(f"git push {remote} --DELETE {branch}", cwd=root, response=True)
+                else:
+                    command_exec(f"git branch -D {branch}", cwd=root, response=True)   
             else:
                 return
 
-        option = int(pretty_printer("Deseas reflejar tu nueva rama en el repo remoto? (1 Si) o (2 No): ", inputF=True))
+        option = int(pretty_printer(f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ", inputF=True))
 
-        if option == 1:
+        if option == 1 and not flag_remote_del:
             command_exec(f'''git push -u {remote} {branch}''', cwd=root, response=True)
             update_local(root=root)   
         else:

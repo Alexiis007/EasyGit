@@ -52,7 +52,19 @@ def main():
     while True:         
         nerv_art(2)                      
         print("-"*60)  
-        active_branch = get_branches(root=root)    
+
+        data_branches = get_branches(root=root)
+        active_branch = data_branches["active_branch"]   
+        branches = data_branches["branches"]   
+
+        pretty_printer("Ramas existentes en el espacio de trabajo:") 
+        print("-"*60) 
+        
+        for branch in branches:
+            pretty_printer(f"- {branch}")      
+
+        pretty_printer(f"\n->  Rama activa: {active_branch}")    
+  
         print("-"*60)  
         status(root=root, active_branch=active_branch)                
         print("-"*60)  

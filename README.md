@@ -26,9 +26,9 @@ Comando final:
 
     Igual es necesario que tengas un .venv    
 
--------------
+--------------------------------------------------------------------
 Instalacion de librerias .venv
---------------
+--------------------------------------------------------------------
 Activar .venv
     .\.venv\Scripts\activate
 Instalacion
@@ -40,3 +40,11 @@ Verifica
 ---- > Error si la hora del PC no esta bien
 ---- > Errore porque Git no esta instalado
 ---- > Agregar acceso rapido (opcion) de crear un repo en esccritorio 
+
+
+--------------------------------------------------------------------
+Pendientes
+--------------------------------------------------------------------
+1- Identificar ramas remotas al borrarlas y aplicar "git push origin --delete RAMA"
+
+2- Puedo crear ramas a partir de ramas que no existen - Agregar validacion
