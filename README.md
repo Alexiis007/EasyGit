@@ -52,3 +52,5 @@ Pendientes
 3- del_branch() reefactorizar
 
 4-Nueva opcion mover modificaciones de archivos a otra rama - git stash --include-untracked
+
+5 Identificar cuando se va un token clavado

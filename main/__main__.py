@@ -15,11 +15,16 @@ def main():
     logger(msg="-"*60, level="info")
     
     subprocess.run("color 0A", shell=True)                        
-    
+
     token = sessions()    
 
     flag = True
+    flag = True
     
+    while flag:
+        subprocess.run("cls", shell=True)                        
+        nerv_art(2)        
+        print("-"*60)  
     while flag:
         subprocess.run("cls", shell=True)                        
         nerv_art(2)        
@@ -33,9 +38,32 @@ def main():
             working_option = int(pretty_printer("R=", inputF=True))
         except:
             working_option = ""
+        pretty_printer("Iniciar en repo existente o crear un espacio nuevo:")
+        pretty_printer("\t1- Trabajar sobre un repo local existente")
+        pretty_printer("\t2- Crear un espacio nuevo (Clonacion de repo)")
+        pretty_printer("\t3- Crear un repositorio nuevo")    
+        try:
+            working_option = int(pretty_printer("R=", inputF=True))
+        except:
+            working_option = ""
         
         print("-"*60)  
+        print("-"*60)  
         
+        if working_option == 1:
+            root = get_workspace()                         
+            remote = set_remote_token(root=root, token=token)            
+            flag = False            
+        elif working_option == 2:
+            root, remote = clone(token=token)                    
+            pretty_printer("Pulse enter para continuar:", inputF=True)                
+            subprocess.run("cls", shell=True)
+            flag = False
+        elif working_option == 3:       
+            root, remote = new_repo(token=token)             
+            pretty_printer("Pulse enter para continuar:", inputF=True)                
+            subprocess.run("cls", shell=True)
+            flag = False        
         if working_option == 1:
             root = get_workspace()                         
             remote = set_remote_token(root=root, token=token)            
