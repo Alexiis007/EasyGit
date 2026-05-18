@@ -9,12 +9,17 @@ from git_actions import *
 
 from tokens import *
 
-def main():    
-    subprocess.run("color 0A", shell=True)                    
-
+def main():
+    logger(msg="-"*60, level="info")
+    logger(msg="main() - Iniciando CLI", level="info")        
+    logger(msg="-"*60, level="info")
+    
+    subprocess.run("color 0A", shell=True)                        
+    
     token = sessions()    
 
     flag = True
+    
     while flag:
         subprocess.run("cls", shell=True)                        
         nerv_art(2)        
@@ -33,7 +38,7 @@ def main():
         
         if working_option == 1:
             root = get_workspace()                         
-            remote = set_remote_token(root=root, token=token)
+            remote = set_remote_token(root=root, token=token)            
             flag = False            
         elif working_option == 2:
             root, remote = clone(token=token)                    
@@ -59,7 +64,7 @@ def main():
 
         pretty_printer("Ramas existentes en el espacio de trabajo:") 
         print("-"*60) 
-        
+
         for branch in branches:
             pretty_printer(f"- {branch}")      
 
@@ -72,33 +77,36 @@ def main():
         print("-"*60)  
 
         options = [
-            "1- Cambiar rama de trabajo",
-            "2- Realizar un commit",
-            "3- Realizar un commit + push",
-            "4- Crear una rama",
-            "5- Borrar rama",
-            "6- Realizar merge",
-            "7- Salida Limpia (Experimental)",
-            "8- Historial de commits",
-            "9- Abrir explorador de Windows",
-            "10- Actualizar Ventana",
-            "0- Cerrar sesion"
+            "Cambiar rama de trabajo",      #1
+            "Realizar un commit",           #2
+            "Realizar un commit + push",    #3
+            "Crear una rama",               #4
+            "Borrar rama",                  #5
+            "Realizar merge",               #6
+            "Salida Limpia (Experimental)", #7
+            "Historial de commits",         #8
+            "Abrir explorador de Windows",  #9
+            "Actualizar Ventana",           #10
+            "Abrir repo en navegador",      #11
+            "Cerrar sesion"                 #12            
         ]
 
         count = 0
+        index = 0
         for i in options:            
+            index+=1
             if count == 0:
                 line = i    
                 count += 1                
                 if count == 1 and i == options[-1]:                                
-                    pretty_printer(f"{line}")                    
+                    pretty_printer(f"{index}- {line}")                    
             elif count == 1:                
                 line += f" "*(35-len(line))
-                pretty_printer(f"{line}{i}")
+                pretty_printer(f"{index-1}- {line}{index}- {i}")
                 count = 0                            
 
         print("-"*60)  
-        option = int(pretty_printer("R=", inputF=True))
+        option = only_int_options(max_number_option=len(options), zero_start=True)
         print("-"*60)  
 
         match option:
@@ -180,7 +188,10 @@ def main():
                 subprocess.run("cls", shell=True) 
             case 10:                                
                 subprocess.run("cls", shell=True) 
-            case 0:                
+            case 11:                                
+                command_exec(f"start {remote}")
+                subprocess.run("cls", shell=True) 
+            case 12:                
                 main()                           
 
 if __name__ == "__main__":

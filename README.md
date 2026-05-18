@@ -48,3 +48,7 @@ Pendientes
 1- Identificar ramas remotas al borrarlas y aplicar "git push origin --delete RAMA"
 
 2- Puedo crear ramas a partir de ramas que no existen - Agregar validacion
+
+3- del_branch() reefactorizar
+
+4-Nueva opcion mover modificaciones de archivos a otra rama - git stash --include-untracked

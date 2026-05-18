@@ -16,6 +16,9 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 
 def set_token(user:str):
+    logger(msg="-"*60, level="info")
+    logger(msg="set_token(user:str) - Estableciendo cifrado y guardado de token", level="info")            
+    logger(msg="-"*60, level="info")
 
     token = pretty_printer(
         "Ingrese el token del usuario:\n",
@@ -93,6 +96,10 @@ def set_token(user:str):
     return True
 
 def get_token(user:str):    
+    logger(msg="-"*60, level="info")
+    logger(msg="get_token(user:str) - Decodificando y obteniendo token", level="info")  
+    logger(msg="-"*60, level="info")
+
     password = pwinput.pwinput(
         prompt="Ingrese la contraseña maestra:\n",
         mask="*"
@@ -154,6 +161,10 @@ def get_token(user:str):
         return None
     
 def list_users():
+    logger(msg="-"*60, level="info")
+    logger(msg="list_users() - Obteniendo lista de usuarios (Tokens) registrados", level="info")        
+    logger(msg="-"*60, level="info")
+
     print("-"*60)  
     pretty_printer("Usuarios Registrados:")
     print("-"*60)  
@@ -187,6 +198,9 @@ def list_users():
     return name_users
 
 def vigenci_token(token:str):
+    logger(msg="-"*60, level="info")
+    logger(msg="vigenci_token(token:str) - Validando vigencia del token", level="info")        
+    logger(msg="-"*60, level="info")
     headers = {
         "Authorization": f"token {token}"
     }
@@ -202,6 +216,9 @@ def vigenci_token(token:str):
         return True
     
 def del_user(user:str):
+    logger(msg="-"*60, level="info")
+    logger(msg="del_user(user:str) - Borrando cuenta registrada (Borrado de archivos .key y .salt)", level="info")        
+    logger(msg="-"*60, level="info")
     desktop = os.path.join(
         os.path.expanduser("~"),
         "Desktop"
@@ -229,6 +246,9 @@ def del_user(user:str):
         os.remove(file_salt)        
 
 def sessions():
+    logger(msg="-"*60, level="info")
+    logger(msg="sessions() - Inicio de sesion", level="info")        
+    logger(msg="-"*60, level="info")
     
     token = ""
     flag = True
@@ -245,7 +265,7 @@ def sessions():
         pretty_printer("\t1- Iniciar sesion")
         pretty_printer("\t2- Registrar un token usuario nuevo")
         try:
-            option = int(pretty_printer("R=", inputF=True))
+            option = only_int_options(max_number_option=2)
             print("-"*60)  
         except:
             continue

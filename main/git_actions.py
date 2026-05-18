@@ -1,6 +1,3 @@
-# Para logs
-import logging
-
 # Utilidades con ruteo y de mas
 import os
 
@@ -10,13 +7,10 @@ import shutil
 # importacion de herramientas de trabajo
 from tools import *
 
-# Logger Config
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)    
-
 def get_workspace():
-    # logger.info("get_workspace - Obtencion de espacio de trabajo.")
-    # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="get_workspace() - Estableciendo espacio de trabajo", level="info")        
+    logger(msg="-"*60, level="info")
 
     flag = True
     while flag:
@@ -35,8 +29,7 @@ def get_workspace():
 
     print("-"*60)
     if not ".git" in list_dir:
-        command_exec("cls", root)
-        # logger.error("get_workspace - Obtencion de espacio de trabajo. Ruta incorrecta.")        
+        command_exec("cls", root)        
         pretty_printer("La ruta establecida no contiene una archivo .git.")
         pretty_printer("Por favor intente de nuevo.")
         print("-"*60)
@@ -49,8 +42,9 @@ def get_workspace():
     return root
 
 def set_remote_token(root:str, token:str):
-    # logger.info("setToken - Establecimiento del token.")
-    # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="set_remote_token(root:str, token:str) - Estableciendo token en liga remota", level="info")        
+    logger(msg="-"*60, level="info")
 
     remote_root = command_exec("git remote -v", response=True, cwd=root)
     remote_root = str(remote_root).split("\n")[0].replace("\t", " ").split(" ")    
@@ -79,8 +73,9 @@ def set_remote_token(root:str, token:str):
     return remote_root_token
 
 def get_branches(root:str):
-    # logger.info("get_branches - Obtencion de ramas en el repositorio remoto.")
-    # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="get_branches(root:str) - Iniciando la obtencion de ramas", level="info")        
+    logger(msg="-"*60, level="info")
 
     update_local(root=root)
 
@@ -103,8 +98,10 @@ def get_branches(root:str):
     return data_branches
 
 def change_branch(root:str, remote:str, active_branch:str):
-    # # logger.info("change_branch - Cambio de rama de trabajo.")
-    # # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="change_branch(root:str, remote:str, active_branch:str) - Iniciando el proceso de cambio de rama", level="info")    
+    logger(msg="-"*60, level="info")
+# 
 
     pretty_printer("A que rama desea cambiar:")
     branch = pretty_printer("Opcion: ", inputF=True)
@@ -115,7 +112,7 @@ def change_branch(root:str, remote:str, active_branch:str):
     pretty_printer(f"\t1- Cancela todo y regresemos")
     pretty_printer(f"\t2- Guardemos todo ahora mismo")
     pretty_printer(f"\t3- Si ya todo esta guardado, solo continuemos")
-    option = int(pretty_printer(f"Opcion:", inputF=True))
+    option = only_int_options(max_number_option=3)
 
     flag = True
     while flag:        
@@ -135,22 +132,20 @@ def change_branch(root:str, remote:str, active_branch:str):
                 pretty_printer("Tienes cambios no commiteados...")
                 pretty_printer("Seras regresado al menu, reviza bien tus cambios.")
             flag = False
-        else:        
-            print("-"*60)    
-            pretty_printer("Solo se pueden las opciones mostradas !")
-            option = int(pretty_printer(f"Opcion:", inputF=True))
 
     update_local(root=root)        
 
 def commit(root:str, remote:str, push:bool, active_branch:str):
-    # # logger.info("change_branch - Cambio de rama de trabajo.")
-    # # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="commit(root:str, remote:str, push:bool, active_branch:str) - Iniciando commit", level="info")    
+    logger(msg="-"*60, level="info")
+# 
 
     pretty_printer("Opcion de guardado: ")
     pretty_printer("\t1- Guardar todo")
     pretty_printer("\t2- Especificar archivos")
     pretty_printer("\t3- Cancelar commit")
-    option = int(pretty_printer("R=", inputF=True)) 
+    option = only_int_options(max_number_option=3)
 
     command_exec(f'''git fetch''', cwd=root, response=True)    
 
@@ -177,8 +172,10 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
         command_exec(f'''git fetch''', cwd=root, response=True)    
 
 def new_branch(root:str, remote:str):
-    # # logger.info("change_branch - Cambio de rama de trabajo.")
-    # # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="new_branch(root:str, remote:str) - Iniciando la creacion de rama", level="info")    
+    logger(msg="-"*60, level="info")
+# 
 
     branch = pretty_printer("A partir de que rama deseas partir: ", inputF=True)    
 
@@ -190,29 +187,31 @@ def new_branch(root:str, remote:str):
     command_exec(f"git switch -c {new_branch}", cwd=root, response=True)
     update_local(root=root)      
 
-    option = int(pretty_printer("Deseas reflejar tu nueva rama en el repo remoto? (1 Si) o (2 No): ", inputF=True))
+    option = only_int_options(max_number_option=2, msg=f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ")
 
     if option == 1:
         command_exec(f'''git push -u {remote} {new_branch}''', cwd=root, response=True)
         update_local(root=root)      
 
 def update_local(root:str):
-    # # logger.info("change_branch - Cambio de rama de trabajo.")
-    # # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="update_local(root:str) - Actualizando repositorio local", level="info")    
+    logger(msg="-"*60, level="info")
+# 
     command_exec(f'''git fetch --all --prune''', cwd=root, response=True)
     command_exec(f'''git pull --prune''', cwd=root, response=True)    
 
 def del_branch(root:str, remote:str, active_branch:str):
-    # # logger.info("change_branch - Cambio de rama de trabajo.")
-    # # print("-"*60)    
+    logger(msg="-"*60, level="info")
+    logger(msg="del_branch(root:str, remote:str, active_branch:str) - Iniciando el borrado de rama", level="info")    
+    logger(msg="-"*60, level="info")
+#     
 
     update_local(root=root)
 
-    branch = pretty_printer("Que rama deseas borrar: ", inputF=True)   
-    branch = branch.split("/")[-1].strip()
+    branch = pretty_printer("Que rama deseas borrar: ", inputF=True).split("/")[-1].strip()    
 
-    denied = ["main", "master"]
-    branches = get_branches(root=root)["branches"]
+    denied = ["main", "master"]    
 
     if branch.lower() in denied:
         pretty_printer(f"No puedes eliminar {branch}...")
@@ -226,57 +225,37 @@ def del_branch(root:str, remote:str, active_branch:str):
     pretty_printer("\t2- No, regresar")
     option = only_int_options(max_number_option=2) 
 
-    flag_remote_del = False
-
-    for branch_line in branches:
-        branch_line = branch_line.split("/")        
-
-        if "remotes" == branch_line[0].strip() and branch == branch_line[-1].strip():
-            pretty_printer(f"Se detecto que {branch} es una rama existente en el remoto")             
-            pretty_printer(f"Deseas continuar con la eliminacion:")      
-            pretty_printer("\t1- Si, continuar")
-            pretty_printer("\t2- No, regresar")    
-            option_remote_del = only_int_options(max_number_option=2) 
-
-            if option_remote_del == 1:
-                flag_remote_del = True
-            elif option_remote_del == 2:
-                return
-
     if option == 1:
-        if flag_remote_del:
-            res = command_exec(f"git push {remote} --delete {branch}", cwd=root, response=True)
-        else:
-            res = command_exec(f"git branch -d {branch}", cwd=root, response=True)           
+        res = command_exec(f"git branch -d {branch}", cwd=root, response=True)           
 
         if "is not fully merged" in res:
             print("-"*60)
             pretty_printer(f"{branch} tiene commits que no existen en main")
-            pretty_printer("\t1- Salir y revizar esos commits")
-            pretty_printer("\t2- Forzar eliminacion de la rama")
-            option = int(pretty_printer("R= ", inputF=True))
+            pretty_printer("\t1- Forzar eliminacion de la rama")
+            pretty_printer("\t2- Salir y revizar esos commits")
+            option = only_int_options(max_number_option=2)
 
-            if option == 2:
-                if flag_remote_del:
-                    res = command_exec(f"git push {remote} --DELETE {branch}", cwd=root, response=True)
-                else:
-                    command_exec(f"git branch -D {branch}", cwd=root, response=True)   
-            else:
+            if option == 1:
+                command_exec(f"git branch -D {branch}", cwd=root, response=True)   
+            elif option == 2:                                
                 return
 
-        option = int(pretty_printer(f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ", inputF=True))
+        option = only_int_options(max_number_option=2, msg=f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ")
 
-        if option == 1 and not flag_remote_del:
+        if option == 1:
             command_exec(f'''git push -u {remote} {branch}''', cwd=root, response=True)
+            command_exec(f"git push {remote} --DELETE {branch}", cwd=root, response=True)
             update_local(root=root)   
-        else:
+        elif option == 2:
             return    
-    else:
+    elif option == 2:
         return
 
 def pending_changes(root:str):
-    # # logger.info("change_branch - Cambio de rama de trabajo.")
-    # # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="pending_changes(root:str) - Buscando pendientes", level="info")    
+    logger(msg="-"*60, level="info")
+# 
     response = command_exec("git status", cwd=root, response=True)
 
     if "Changes not staged for commit" in response:
@@ -286,8 +265,10 @@ def pending_changes(root:str):
         return True
  
 def status(root:str, active_branch:str):
-    # # logger.info("change_branch - Cambio de rama de trabajo.")
-    # # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="status(root:str, active_branch:str) - Obteniendo el status de cambios", level="info")    
+    logger(msg="-"*60, level="info")
+# 
 
     pretty_printer(f"Estatus de rama actual - {active_branch}:")
     print("-"*60)
@@ -357,6 +338,9 @@ def status(root:str, active_branch:str):
         pretty_printer("\tNo hay archivos nuevos detectados.")
         
 def hist_commits(root:str, active_branch:str):
+    logger(msg="-"*60, level="info")
+    logger(msg="hist_commits(root:str, active_branch:str) - Obteniendo el historial de commits", level="info")
+    logger(msg="-"*60, level="info")
     command_exec("cls", cwd=root)
     print("-"*60)  
     pretty_printer(f"Historial de commits - {active_branch}:")    
@@ -370,8 +354,10 @@ def hist_commits(root:str, active_branch:str):
         pretty_printer("Nada por mostrar...")
 
 def merge(root:str, active_branch:str):
-    # # logger.info("change_branch - Cambio de rama de trabajo.")
-    # # print("-"*60)
+    logger(msg="-"*60, level="info")
+    logger(msg="merge(root:str, active_branch:str) - Iniciando merge", level="info")    
+    logger(msg="-"*60, level="info")
+# 
 
     if not pending_changes(root=root):
         pretty_printer(f"Tienes cambios pendientes dentro de {active_branch}, primero arreglalos.")
@@ -397,6 +383,9 @@ def merge(root:str, active_branch:str):
     pretty_printer(f"-> Recuerda hacer un push de tu rama {branch}")
 
 def clone(token:str):
+    logger(msg="-"*60, level="info")
+    logger(msg="clone(token:str) - Iniciando clonacion de repositorio", level="info")
+    logger(msg="-"*60, level="info")
     https = pretty_printer("Ingrese el HTTPS de su repo: ", inputF=True)
     user = pretty_printer("Ingrese el nombre de su usuario en git: ", inputF=True)
     # token = pretty_printer("Ingrese el token de su sesion git: ", inputF=True)    
@@ -432,7 +421,10 @@ def clone(token:str):
     return root, remote_root_token
     
 def new_repo(token:str):
-    https = pretty_printer("Ingrese el HTTPS de su nuevo repo (Antes creelo en git): ", inputF=True)
+    logger(msg="-"*60, level="info")
+    logger(msg="new_repo(token:str) - Iniciando creacion de repositorio", level="info")
+    logger(msg="-"*60, level="info")
+    https = pretty_printer("Ingrese el HTTPS de su nuevo repo (Antes crealo en git): \n", inputF=True)
     user = pretty_printer("Ingrese el nombre de su usuario en git: ", inputF=True)
     # token = pretty_printer("Ingrese el token de su sesion git: ", inputF=True)    
 
@@ -475,12 +467,15 @@ def new_repo(token:str):
     return root, remote_root_token
 
 def exit_clean(root:str):
+    logger(msg="-"*60, level="info")
+    logger(msg="exit_clean(root:str) - Iniciando la salida limpia", level="info")
+    logger(msg="-"*60, level="info")
     pretty_printer("Salida borrara todo rastro del repo local")
     pretty_printer("Asegurese de tener todos los cambios ya en el remoto")
     pretty_printer("Esta seguro de continuar con la accion:")
     pretty_printer("\t1- Si")
     pretty_printer("\t2- No")
-    option = int(pretty_printer("R=", inputF=True))
+    option = only_int_options(max_number_option=2)
     print("-"*60)  
 
     if option == 1:        
