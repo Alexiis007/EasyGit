@@ -109,14 +109,15 @@ def main():
             "Realizar un commit",           #2
             "Realizar un commit + push",    #3
             "Crear una rama",               #4
-            "Borrar rama",                  #5
+            "Borrar rama",                  #5            
             "Realizar merge",               #6
             "Salida Limpia (Experimental)", #7
             "Historial de commits",         #8
             "Abrir explorador de Windows",  #9
             "Actualizar Ventana",           #10
             "Abrir repo en navegador",      #11
-            "Cerrar sesion"                 #12            
+            "Empujar rama a remoto",        #12
+            "Cerrar sesion"                 #13            
         ]
 
         count = 0
@@ -220,6 +221,14 @@ def main():
                 command_exec(f"start {remote}")
                 subprocess.run("cls", shell=True) 
             case 12:                
+                push_branch_to_remote(remote=remote)
+                print()
+                print("-"*60)  
+                pretty_printer(f"Tarea finalizada con exito !")
+                print("-"*60)  
+                pretty_printer("Pulse enter para continuar:", inputF=True)                
+                subprocess.run("cls", shell=True)                      
+            case 13:                
                 main()                           
 
 if __name__ == "__main__":
