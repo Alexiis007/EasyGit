@@ -499,7 +499,8 @@ def exit_clean(root:str):
 def push_branch_to_remote(remote:str):
     branch = str(pretty_printer("Que rama deseas empujar:", inputF=True))
 
-    branches = get_branches()["branches"] 
+    data_branches = get_branches(root=remote)    
+    branches = data_branches["branches"]  
 
     for i in branches:
         if branch in i and remote not in i:
