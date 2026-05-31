@@ -1,5 +1,5 @@
-# Para cambio de icono consola
-import ctypes
+# Para logs
+import logging
 
 # Para el metodo de escritura 
 import sys
@@ -145,29 +145,4 @@ def only_int_options(max_number_option:int, zero_start:bool=False, msg:str="R=")
             pretty_printer(f"Solo numeros por favor !")
             print("-"*60)
     
-    # Cargar icono .ico
-    icon_path = r"C:\Users\cjuarez\Desktop\EasyGit\assets\nerv.ico"
-
-    # Constantes Windows
-    WM_SETICON = 0x80
-    ICON_SMALL = 0
-    ICON_BIG = 1
-
-    # Obtener ventana de consola
-    hwnd = ctypes.windll.kernel32.GetConsoleWindow()
-
-    # Cargar icono
-    hicon = ctypes.windll.user32.LoadImageW(
-        0,
-        icon_path,
-        1,  # IMAGE_ICON
-        0,
-        0,
-        0x00000010  # LR_LOADFROMFILE
-    )
-
-    # Aplicar icono grande y pequeño
-    # ctypes.windll.user32.SendMessageW(hwnd, WM_SETICON, ICON_SMALL, hicon)
-    ctypes.windll.user32.SendMessageW(hwnd, WM_SETICON, ICON_BIG, hicon)
-
-    print("Icono cambiado")
+    

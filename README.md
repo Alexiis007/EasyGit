@@ -54,3 +54,11 @@ Pendientes
 4-Nueva opcion mover modificaciones de archivos a otra rama - git stash --include-untracked
 
 5 Identificar cuando se va un token clavado
+
+6- Deteccion de commits de diferencia contra main: git cherry main pdf-detallado-layout-header
+
+7-Cree una rama con el nombre remote/origin/ al inicio :(
+
+8- Reflejar rama en remoto: git push -u origin pdf-detallado-layout-header
+
+9- Borrar rama remota cuando la local ya no existe:git push origin --delete pdf-detallado-layout-header
