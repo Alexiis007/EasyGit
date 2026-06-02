@@ -496,16 +496,16 @@ def exit_clean(root:str):
     else:
         return
     
-def push_branch_to_remote(remote:str):
+def push_branch_to_remote(remote:str, root:str):
     branch = str(pretty_printer("Que rama deseas empujar:", inputF=True))
 
-    data_branches = get_branches(root=remote)    
+    data_branches = get_branches(root=root)    
     branches = data_branches["branches"]  
 
     for i in branches:
-        if branch in i and remote not in i:
+        if branch in i and 'remote' not in i:
             command_exec(f"""
                 git push -u {remote} {branch}
-            """)
+            """, cwd=root)
         if branch in i and remote in i:
             pretty_printer(f"{branch} ya esta en el remoto!")

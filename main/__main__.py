@@ -220,10 +220,10 @@ def main():
             case 10:                                
                 subprocess.run("cls", shell=True) 
             case 11:                                
-                command_exec(f"start {remote}")
+                command_exec(f"start {remote}", cwd=root)
                 subprocess.run("cls", shell=True) 
             case 12:                
-                push_branch_to_remote(remote=remote)
+                push_branch_to_remote(root=root, remote=remote)
                 print()
                 print("-"*60)  
                 pretty_printer(f"Tarea finalizada con exito !")
