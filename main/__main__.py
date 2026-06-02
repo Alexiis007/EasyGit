@@ -116,7 +116,7 @@ def main():
             "Abrir explorador de Windows",  #9
             "Actualizar Ventana",           #10
             "Abrir repo en navegador",      #11
-            "Empujar rama a remoto",        #12
+            "Empujar rama",        #12
             "Cerrar sesion"                 #13            
         ]
 
