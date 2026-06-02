@@ -9,6 +9,8 @@ from git_actions import *
 
 from tokens import *
 
+# from gui import *
+
 def main():
     logger(msg="-"*60, level="info")
     logger(msg="main() - Iniciando CLI", level="info")        
@@ -233,3 +235,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+    # app = QtWidgets.QApplication([])
+
+    # widget = MyWidget()
+    # widget.resize(800, 600)
+    # widget.show()
+
+    # sys.exit(app.exec())
