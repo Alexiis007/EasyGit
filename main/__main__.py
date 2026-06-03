@@ -77,132 +77,66 @@ def main():
         print("-"*60)  
 
         options = [
-            "Cambiar rama de trabajo",      #1
-            "Realizar un commit",           #2
-            "Realizar un commit + push",    #3
-            "Crear una rama",               #4
-            "Borrar rama",                  #5            
-            "Realizar merge",               #6
-            "Salida Limpia (Experimental)", #7
-            "Historial de commits",         #8
-            "Abrir explorador de Windows",  #9
-            "Actualizar Ventana",           #10
-            "Abrir repo en navegador",      #11
-            "Empujar rama",        #12
-            "Cerrar sesion"                 #13            
+            ["Cambiar rama de trabajo", lambda:change_branch(root=root, remote=remote, active_branch=active_branch), True],      #1
+            ["Realizar un commit", lambda:commit(root=root, remote=remote, push=False, active_branch=active_branch), True],           #2
+            ["Realizar un commit + push", lambda:commit(root=root, remote=remote, push=True, active_branch=active_branch), True],    #3
+            ["Crear una rama", lambda:new_branch(root=root, remote=remote), True],              #4
+            ["Borrar rama", lambda:del_branch(root=root, remote=remote, active_branch=active_branch), True],                  #5            
+            ["Realizar merge", lambda:merge(root=root, active_branch=active_branch), True],               #6
+            ["Insertar Comando", "", True], #7
+            ["Historial de commits", lambda:hist_commits(root=root, active_branch=active_branch), True],         #8
+            ["Abrir explorador de Windows", lambda:command_exec("explorer .", cwd=root), False],  #9
+            ["Actualizar Ventana", lambda:subprocess.run("cls", shell=True), False],           #10
+            ["Abrir repo - Web", lambda:command_exec(f"start {remote}", cwd=root), False],      #11
+            ["Empujar rama", lambda:push_branch_to_remote(root=root, remote=remote), True],        #12
+            ["Cerrar sesion", lambda:main(), False]                 #13            
         ]
 
-        count = 0
+        # Pintado de las opciones
+        side = 0 # Side inicia en 0 (0=izquierdo, 1=derecho)
         index = 0
-        for i in options:            
+        for i in options:        
+            i = i[0]
             index+=1
-            if count == 0:
+
+            # Lado izquierdo 0
+            if side == 0:
                 line = i    
-                count += 1                
-                if count == 1 and i == options[-1]:                                
+                side += 1                
+                if side == 1 and i == options[-1][0]:                                
                     pretty_printer(f"{index}- {line}")                    
-            elif count == 1:                
-                line += f" "*(35-len(line))
+
+            # Lado derecho 1
+            elif side == 1:     
+                
+                # Agregado de espaciado lateral derecho.
+                # A partir de 10 se aumenta en 1 
+                # el espacio por lo que se corrige restando 1.
+                if index > 10:           
+                    line += f" "*(32-len(line))
+                else:
+                    line += f" "*(33-len(line))
+
                 pretty_printer(f"{index-1}- {line}{index}- {i}")
-                count = 0                            
+                side = 0                            
 
         print("-"*60)  
-        option = only_int_options(max_number_option=len(options), zero_start=True)
+        option = only_int_options(max_number_option=len(options), zero_start=False)
         print("-"*60)  
+        
+        options[option-1][1]()  
 
-        match option:
-            # change_branch(root=root, remote=remote, active_branch=active_branch)                        
-            case 1:                                
-                change_branch(root=root, remote=remote, active_branch=active_branch)                        
-                print()
-                print("-"*60)  
-                pretty_printer(f"Tarea finalizada con exito !")
-                print("-"*60)  
-                pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)
-            # commit(root=root, remote=remote, push=False, active_branch=active_branch)                
-            case 2:                
-                commit(root=root, remote=remote, push=False, active_branch=active_branch)                
-                print()
-                print("-"*60)  
-                pretty_printer(f"Tarea finalizada con exito !")
-                print("-"*60)  
-                pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)                
-            # commit(root=root, remote=remote, push=True, active_branch=active_branch)                
-            case 3:
-                commit(root=root, remote=remote, push=True, active_branch=active_branch)                
-                print()
-                print("-"*60)  
-                pretty_printer(f"Tarea finalizada con exito !")
-                print("-"*60)  
-                pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)   
-            # new_branch(root=root, remote=remote)                
-            case 4:
-                new_branch(root=root, remote=remote)                
-                print()
-                print("-"*60)  
-                pretty_printer(f"Tarea finalizada con exito !")
-                print("-"*60)  
-                pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)   
-            # del_branch(root=root, remote=remote, active_branch=active_branch)                
-            case 5:
-                del_branch(root=root, remote=remote, active_branch=active_branch)                
-                print()
-                print("-"*60)  
-                pretty_printer(f"Tarea finalizada con exito !")
-                print("-"*60)  
-                pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)   
-            # merge(root=root, active_branch=active_branch)                
-            case 6:
-                merge(root=root, active_branch=active_branch)                
-                print()
-                print("-"*60)  
-                pretty_printer(f"Tarea finalizada con exito !")
-                print("-"*60)  
-                pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)   
-            # exit(root=root)                
-            case 7:
-                exit_clean(root=root)                
-                print()
-                print("-"*60)  
-                pretty_printer(f"Tarea finalizada con exito !")
-                print("-"*60)  
-                pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)               
-            # hist_commits(root=root, active_branch=active_branch)                
-            case 8:                
-                hist_commits(root=root, active_branch=active_branch)
-                print()
-                print("-"*60)  
-                pretty_printer(f"Tarea finalizada con exito !")
-                print("-"*60)  
-                pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)        
-            # command_exec("explorer .", cwd=root)         
-            case 9:                
-                command_exec("explorer .", cwd=root)
-                subprocess.run("cls", shell=True) 
-            case 10:                                
-                subprocess.run("cls", shell=True) 
-            case 11:                                
-                command_exec(f"start {remote}", cwd=root)
-                subprocess.run("cls", shell=True) 
-            case 12:                
-                push_branch_to_remote(root=root, remote=remote)
-                print()
-                print("-"*60)  
-                pretty_printer(f"Tarea finalizada con exito !")
-                print("-"*60)  
-                pretty_printer("Pulse enter para continuar:", inputF=True)                
-                subprocess.run("cls", shell=True)                      
-            case 13:                
-                main()                           
-
+        # Estructura de limpieza de pantalla post funcion - detalle estetico
+        if options[option-1][2]:
+            print()
+            print("-"*60)  
+            pretty_printer(f"Tarea finalizada con exito !")
+            print("-"*60)  
+            pretty_printer("Pulse enter para continuar:", inputF=True)                
+            subprocess.run("cls", shell=True)
+        else:
+            subprocess.run("cls", shell=True) 
+        
 if __name__ == "__main__":
     main()
     
