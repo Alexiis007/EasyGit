@@ -7,6 +7,7 @@ from tools import *
 # Importacion de funciones git
 from git_actions import *
 
+# Funcionalidad para el uso de sesiones - tokens
 from tokens import *
 
 # from gui import *
