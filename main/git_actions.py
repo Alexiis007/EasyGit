@@ -83,16 +83,63 @@ def get_branches(root:str):
 
     active_branch = ""
     branches = []    
+    remote_branches = []
+    local_branches = []
+    branches_status = []
 
-    for i in res.split('\n'):
-        if len(str(i)) > 0:            
-            branches.append(i)
-        if "*" in i:
-            active_branch = i.split(" ")[-1]            
+    # Llenado de listado de datos realacionados a las ramas
+    for str_branch in res.split('\n'):
+        if len(str(str_branch)) > 0:            
+            branches.append(str_branch)
+        if "*" in str_branch and len(str_branch)>0:
+            active_branch = str_branch.split(" ")[-1]        
+        if "remote" in str_branch and len(str_branch)>0:
+            remote_branches.append(str_branch)
+        if "remote" not in str_branch and len(str_branch)>0:
+            local_branches.append(str_branch)
+
+    # Llenado de branches_status con las ramas que de identificand como locales y remotas
+    for branch in local_branches:
+        branch = branch.replace('*', '').strip()
+
+        remote_flag = False
+        for r_branch in remote_branches:
+            r_branch = str(r_branch.split("/")[-1]).strip()
+
+            if branch in r_branch:
+                remote_flag = True            
+
+        if remote_flag:
+            if active_branch in branch:
+                branches_status.append(f"-> {branch} (local - remoto)")
+            else:
+                branches_status.append(f"- {branch} (local - remoto)")
+        else:
+            if active_branch in branch:
+                branches_status.append(f"-> {branch} (local)")
+            else:
+                branches_status.append(f"- {branch} (local)")
+
+    # Llenado de branches_status con las ramas que de identificand como solo remotas
+    for branch_r in remote_branches:
+        branch_r = branch_r.split("/")[-1].strip()
+
+        only_remote_flag = True
+        for branch in local_branches:
+            branch = branch.replace('*', '').strip()
+
+            if branch_r in branch:
+                only_remote_flag = False
+
+        if only_remote_flag:
+            branches_status.append(f"- {branch_r} (remoto)")    
+                         
 
     data_branches = {
         "active_branch": active_branch,
-        "branches": branches
+        "branches": branches,
+        "remote_branches": remote_branches,
+        "branches_status": branches_status
     }
 
     return data_branches

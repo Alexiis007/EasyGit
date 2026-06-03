@@ -61,16 +61,14 @@ def main():
         print("-"*60)  
 
         data_branches = get_branches(root=root)
-        active_branch = data_branches["active_branch"]   
-        branches = data_branches["branches"]   
+        active_branch = data_branches["active_branch"]                   
+        branches_status = data_branches["branches_status"]
 
         pretty_printer("Ramas existentes en el espacio de trabajo:") 
         print("-"*60) 
 
-        for branch in branches:
-            pretty_printer(f"- {branch}")      
-
-        pretty_printer(f"\n->  Rama activa: {active_branch}")    
+        for branch in branches_status:
+            pretty_printer(f"{branch}")                          
   
         print("-"*60)  
         status(root=root, active_branch=active_branch)                

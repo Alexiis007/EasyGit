@@ -62,3 +62,5 @@ Pendientes
 8- Reflejar rama en remoto: git push -u origin pdf-detallado-layout-header
 
 9- Borrar rama remota cuando la local ya no existe:git push origin --delete pdf-detallado-layout-header
+
+10- Error cuanto insertas la ruta local de un repo y se inserta una ruta con terminacion a un ejecutable Ejemplo: C:\Users\cjuarez\Desktop\EasyGit\main\git_actions.py
