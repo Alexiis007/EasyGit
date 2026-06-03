@@ -21,7 +21,6 @@ def main():
     token = sessions()    
 
     flag = True
-        
     while flag:
         subprocess.run("cls", shell=True)                        
         nerv_art(2)        
@@ -40,7 +39,7 @@ def main():
 
         if working_option == 1:
             root = get_workspace()                         
-            remote = set_remote_token(root=root, token=token)            
+            remote = set_remote_token(root=root, token=token)
             flag = False            
         elif working_option == 2:
             root, remote = clone(token=token)                    
@@ -76,6 +75,7 @@ def main():
         pretty_printer("Que deseas realizar:")    
         print("-"*60)  
 
+        # Nombre de la opcion, funcionalidad y condicion para limpiar pantalla con mensaje bonito
         options = [
             ["Cambiar rama de trabajo", lambda:change_branch(root=root, remote=remote, active_branch=active_branch), True],      #1
             ["Realizar un commit", lambda:commit(root=root, remote=remote, push=False, active_branch=active_branch), True],           #2

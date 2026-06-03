@@ -1,1 +1,78 @@
+# =========================
+# Python
+# =========================
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Byte-compiled / optimized / DLL files
+*.so
+
+# =========================
+# Virtual environments
+# =========================
+venv/
+env/
+.venv/
+ENV/
+
+# =========================
+# Distribution / packaging
+# =========================
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# PyInstaller
+# =========================
+*.spec
+
+# =========================
+# Jupyter Notebook
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# IDEs / editors
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Qt / PySide / PyQt
+# =========================
+*.qmlc
+*.jsc
+
+# Qt Designer backups
+*.ui.autosave
+
+# =========================
+# Project specific (recomendado)
+# =========================
+main/__pycache__/
+**/__pycache__/
+
+# Tokens / secrets
+.env
+.env.*
+*.key
+*.pem
+tokens.json
