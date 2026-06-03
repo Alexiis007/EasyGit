@@ -186,15 +186,14 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
     logger(msg="-"*60, level="info")
     logger(msg="commit(root:str, remote:str, push:bool, active_branch:str) - Iniciando commit", level="info")    
     logger(msg="-"*60, level="info")
-# 
 
     pretty_printer("Opcion de guardado: ")
     pretty_printer("\t1- Guardar todo")
     pretty_printer("\t2- Especificar archivos")
     pretty_printer("\t3- Cancelar commit")
     option = only_int_options(max_number_option=3)
-
-    command_exec(f'''git fetch''', cwd=root, response=True)    
+    
+    update_local(root=root)
 
     if option == 1:
         print("-"*60)
@@ -215,8 +214,7 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
         return
 
     if push:        
-        command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)
-        command_exec(f'''git fetch''', cwd=root, response=True)    
+        command_exec(f'''git push -u {remote} {active_branch}''', cwd=root, response=True)        
 
 def new_branch(root:str, remote:str):
     logger(msg="-"*60, level="info")
@@ -244,7 +242,9 @@ def update_local(root:str):
     logger(msg="-"*60, level="info")
     logger(msg="update_local(root:str) - Actualizando repositorio local", level="info")    
     logger(msg="-"*60, level="info")
-# 
+
+    # Se usa --all para actualizar la informacion de todo y el --prune fuerza a 
+    # traer cambios remotos para realizar una sincronizacion 
     command_exec(f'''git fetch --all --prune''', cwd=root, response=True)
     command_exec(f'''git pull --prune''', cwd=root, response=True)    
 
