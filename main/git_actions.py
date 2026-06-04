@@ -278,11 +278,16 @@ def del_branch(root:str, remote:str, active_branch:str):
 
     branches_s = get_branches(root=root)["branches_status"]
     
+    # Detectamos si la rama solo existe en el remoto o solo en 
+    # el local pero no en ambos
     flag_is_only_remote = False
+    flag_is_only_local = False
     for branch_s in branches_s:
         if branch in branch_s:
             if "remoto" in branch_s  and "local" not in branch_s:
                 flag_is_only_remote = True
+            if "local" in branch_s  and "remoto" not in branch_s:
+                flag_is_only_local = True
 
     # Segunda advertencia en dado caso de que se detecte una rama existente solo en el remoto
     if flag_is_only_remote:
@@ -317,7 +322,7 @@ def del_branch(root:str, remote:str, active_branch:str):
             
             # Si no era solo remota preguntamos si deseamos 
             # reflejar la eliminacion de la rama local en el remoto
-            if not flag_is_only_remote:
+            if not flag_is_only_remote and not flag_is_only_local:
                 option = only_int_options(max_number_option=2, msg=f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ")
 
                 if option == 1 and flag_is_only_remote is not True:
