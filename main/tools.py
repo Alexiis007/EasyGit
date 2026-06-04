@@ -168,4 +168,16 @@ def only_int_options(max_number_option:int, zero_start:bool=False, msg:str="R=")
             pretty_printer(f"Solo numeros por favor !")
             print("-"*60)
     
+def secrets_scan_repo(root:str):
+    result = subprocess.run(
+        ["gitleaks", "detect", "--source", root, "--no-git"],
+        capture_output=True,
+        text=True,
+        cwd=root
+    )
+
+    if result.returncode != 0:        
+        # print(result.stdout)
+        return False
     
+    return True
