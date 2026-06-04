@@ -45,11 +45,8 @@ Verifica
 --------------------------------------------------------------------
 Pendientes
 --------------------------------------------------------------------
-1- Identificar ramas remotas al borrarlas y aplicar "git push origin --delete RAMA"
 
 2- Puedo crear ramas a partir de ramas que no existen - Agregar validacion
-
-3- del_branch() reefactorizar
 
 4-Nueva opcion mover modificaciones de archivos a otra rama - git stash --include-untracked
 
@@ -61,6 +58,8 @@ Pendientes
 
 8- Reflejar rama en remoto: git push -u origin pdf-detallado-layout-header
 
-9- Borrar rama remota cuando la local ya no existe:git push origin --delete pdf-detallado-layout-header
-
 10- Error cuanto insertas la ruta local de un repo y se inserta una ruta con terminacion a un ejecutable Ejemplo: C:\Users\cjuarez\Desktop\EasyGit\main\git_actions.py
+
+11- usar git cherry -v main para verificar cambios de diferencia contra main
+
+12- Revizar y probar la funcion de borrando

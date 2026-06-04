@@ -252,8 +252,7 @@ def update_local(root:str):
 def del_branch(root:str, remote:str, active_branch:str):
     logger(msg="-"*60, level="info")
     logger(msg="del_branch(root:str, remote:str, active_branch:str) - Iniciando el borrado de rama", level="info")    
-    logger(msg="-"*60, level="info")
-#     
+    logger(msg="-"*60, level="info")     
 
     update_local(root=root)
 
@@ -268,14 +267,39 @@ def del_branch(root:str, remote:str, active_branch:str):
         pretty_printer(f"No puedes borrar {branch} porque actualmente estas en ella...") 
         return
 
+    # Mensaje de confirmacion
     pretty_printer(f"Realmente quieres borrar {branch}:")
     pretty_printer("\t1- Si, continuar")
     pretty_printer("\t2- No, regresar")
     option = only_int_options(max_number_option=2) 
+    if option == 2:
+        return
 
-    if option == 1:
-        res = command_exec(f"git branch -d {branch}", cwd=root, response=True)           
+    branches_s = get_branches(root=root)["branches_status"]
+    
+    flag_is_only_remote = False
+    for branch_s in branches_s:
+        if branch in branch_s:
+            if "remoto" in branch_s  and "local" not in branch_s:
+                flag_is_only_remote = True
 
+    # Segunda advertencia en dado caso de que se detecte una rama existente solo en el remoto
+    if flag_is_only_remote:
+        print("-"*60)
+        pretty_printer("Se detecto que la rama solo existe en el remoto")
+        pretty_printer(f"Deseas continuar:")
+        pretty_printer("\t1- Si, continuar")
+        pretty_printer("\t2- No, regresar")
+        option = only_int_options(max_number_option=2) 
+
+    if option == 1:        
+        if flag_is_only_remote:
+            res = command_exec(f"git push {remote} --delete {branch}", cwd=root, response=True)   
+        else:
+            res = command_exec(f"git branch -d {branch}", cwd=root, response=True)           
+
+        # Si despues del borrado detectamos cambios de diferencia contra main
+        # damos 2 opciones, salir o forzar borrado (Se perderian commits)
         if "is not fully merged" in res:
             print("-"*60)
             pretty_printer(f"{branch} tiene commits que no existen en main")
@@ -283,19 +307,25 @@ def del_branch(root:str, remote:str, active_branch:str):
             pretty_printer("\t2- Salir y revizar esos commits")
             option = only_int_options(max_number_option=2)
 
-            if option == 1:
+            if option == 1 and flag_is_only_remote is not True:
                 command_exec(f"git branch -D {branch}", cwd=root, response=True)   
+            elif option == 1 and flag_is_only_remote is True:
+                command_exec(f"git push {remote} -D {branch}", cwd=root, response=True)   
             elif option == 2:                                
                 return
+            
+            # Si no era solo remota preguntamos si deseamos 
+            # reflejar la eliminacion de la rama local en el remoto
+            if not flag_is_only_remote:
+                option = only_int_options(max_number_option=2, msg=f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ")
 
-        option = only_int_options(max_number_option=2, msg=f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ")
-
-        if option == 1:
-            command_exec(f'''git push -u {remote} {branch}''', cwd=root, response=True)
-            command_exec(f"git push {remote} --DELETE {branch}", cwd=root, response=True)
-            update_local(root=root)   
-        elif option == 2:
-            return    
+                if option == 1 and flag_is_only_remote is not True:
+                    command_exec(f'''git push -u {remote} {branch}''', cwd=root, response=True)
+                    command_exec(f"git push {remote} --DELETE {branch}", cwd=root, response=True)
+                    update_local(root=root)   
+                elif option == 2:
+                    return    
+        
     elif option == 2:
         return
 
