@@ -139,7 +139,8 @@ def get_branches(root:str):
         "active_branch": active_branch,
         "branches": branches,
         "remote_branches": remote_branches,
-        "branches_status": branches_status
+        "local_branches": local_branches,
+        "branches_status": branches_status        
     }
 
     return data_branches
@@ -544,15 +545,23 @@ def exit_clean(root:str):
         return
     
 def push_branch_to_remote(remote:str, root:str):
-    branch = str(pretty_printer("Que rama deseas empujar:", inputF=True))
+    branch = str(pretty_printer("Que rama deseas empujar:", inputF=True)).strip()
 
     data_branches = get_branches(root=root)    
-    branches = data_branches["branches"]  
+    local_branches = data_branches["local_branches"]  
 
-    for i in branches:
-        if branch in i and 'remote' not in i:
-            command_exec(f"""
-                git push -u {remote} {branch}
-            """, cwd=root)
-        if branch in i and remote in i:
-            pretty_printer(f"{branch} ya esta en el remoto!")
+    flag_local_branch = False
+    for l_branch in local_branches:
+        l_branch = l_branch.replace('*', '').strip()
+
+        if branch == l_branch:
+            flag_local_branch = True
+    
+    if flag_local_branch:
+        command_exec(f"""
+            git push -u {remote} {branch}
+        """, cwd=root, response=True)
+        print(f"ALALA git push -u {remote} {branch}", )
+    else:            
+        pretty_printer("No se realizo ningun push. Reviza bien tu rama.")
+            
