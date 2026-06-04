@@ -219,6 +219,7 @@ def del_user(user:str):
     logger(msg="-"*60, level="info")
     logger(msg="del_user(user:str) - Borrando cuenta registrada (Borrado de archivos .key y .salt)", level="info")        
     logger(msg="-"*60, level="info")
+
     desktop = os.path.join(
         os.path.expanduser("~"),
         "Desktop"
@@ -231,12 +232,12 @@ def del_user(user:str):
 
     file_key = os.path.join(
         credentials_folder,
-        "user.key"
+        f"{user}.key"
     )
 
     file_salt = os.path.join(
         credentials_folder,
-        "user.salt"
+        f"{user}.salt"
     )
 
     if os.path.exists(file_key):
@@ -264,8 +265,10 @@ def sessions():
         
         pretty_printer("\t1- Iniciar sesion")
         pretty_printer("\t2- Registrar un token usuario nuevo")
+        pretty_printer("\t3- Borrar usuario")
+        pretty_printer("\t4- Actualizar ventana")
         try:
-            option = only_int_options(max_number_option=2)
+            option = only_int_options(max_number_option=4)
             print("-"*60)  
         except:
             continue
@@ -325,4 +328,25 @@ def sessions():
             pretty_printer("Presione enter para continuar", inputF=True)
             continue     
 
+        elif option == 3:
+            user = pretty_printer("Ingrese el usuario git:\n", inputF=True)
+            
+            if user not in users:
+                pretty_printer(f"El usuario {user} no esta registrado aun !")
+                pretty_printer("Por favor intente primero registrarlo")
+                print("-"*60)  
+                pretty_printer("Presione enter para continuar", inputF=True)
+                continue
+            
+            pretty_printer(f"Estas seguro de querer borrar {user}:")
+            pretty_printer("1- Si, avanzar")
+            pretty_printer("2- No, cancelar")
+            confirm = only_int_options(max_number_option=2)
+
+            if confirm == 1:
+                del_user(user=user)
+            elif confirm == 2:
+                continue
+        elif option == 4:
+            sessions()
     return token   

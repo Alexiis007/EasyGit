@@ -21,6 +21,7 @@ def main():
     
     subprocess.run("color 0A", shell=True)                        
 
+    # Inicio de sesion / Registro de sesion (Menu)
     token = sessions()    
 
     flag = True
@@ -58,6 +59,7 @@ def main():
     update_local(root=root)            
     subprocess.run("cls", shell=True)                    
 
+    # Menu de acciones - EasyGit
     while True:         
         art(art_number)                      
         print("-"*60)  
@@ -66,7 +68,7 @@ def main():
         active_branch = data_branches["active_branch"]                   
         branches_status = data_branches["branches_status"]
 
-        pretty_printer("Ramas existentes en el espacio de trabajo:") 
+        pretty_printer("Ramas existentes en el repositorio:") 
         print("-"*60) 
 
         for branch in branches_status:

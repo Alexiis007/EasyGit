@@ -377,7 +377,6 @@ def status(root:str, active_branch:str):
     logger(msg="-"*60, level="info")
     logger(msg="status(root:str, active_branch:str) - Obteniendo el status de cambios", level="info")    
     logger(msg="-"*60, level="info")
-# 
 
     pretty_printer(f"Estatus de rama actual - {active_branch}:")
     print("-"*60)

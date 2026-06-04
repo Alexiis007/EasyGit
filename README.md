@@ -77,7 +77,7 @@ EasyGit permite múltiples usuarios GitHub en un mismo entorno:
 
 ```text
 ------------------------------------------------------------
-Ramas existentes en el espacio de trabajo:
+Ramas existentes en el repositorio:
 ------------------------------------------------------------
 
 -> dev (local - remoto)
