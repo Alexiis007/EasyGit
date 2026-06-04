@@ -46,8 +46,6 @@ Verifica
 Pendientes
 --------------------------------------------------------------------
 
-2- Puedo crear ramas a partir de ramas que no existen - Agregar validacion
-
 4-Nueva opcion mover modificaciones de archivos a otra rama - git stash --include-untracked
 
 5 Identificar cuando se va un token clavado
@@ -63,3 +61,5 @@ Pendientes
 11- usar git cherry -v main para verificar cambios de diferencia contra main
 
 12- Revizar y probar la funcion de borrando
+
+AAA
