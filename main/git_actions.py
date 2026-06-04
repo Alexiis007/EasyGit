@@ -558,9 +558,7 @@ def push_branch_to_remote(remote:str, root:str):
             flag_local_branch = True
     
     if flag_local_branch:
-        command_exec(f"""
-            git push -u {remote} {branch}
-        """, cwd=root, response=True)
+        command_exec(f"""git push -u {remote} {branch}""", cwd=root, response=True)
         print(f"ALALA git push -u {remote} {branch}", )
     else:            
         pretty_printer("No se realizo ningun push. Reviza bien tu rama.")
