@@ -76,3 +76,9 @@ main/__pycache__/
 *.key
 *.pem
 tokens.json
+
+# =========================
+# Dist and Build
+# =========================
+dist/
+build/
