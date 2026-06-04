@@ -206,3 +206,9 @@ Proceso:
 **Alexsis007**
 
 Herramienta creada para optimizar flujos de trabajo con Git desde terminal en Windows.
+
+# EasyGit
+
+![Version](https://img.shields.io/badge/version-v1.0.0-red)
+![Platform](https://img.shields.io/badge/platform-Windows-blue)
+![Python](https://img.shields.io/badge/python-3.12+-green)
