@@ -12,7 +12,7 @@ from tokens import *
 
 # from gui import *
 
-art_number = 2
+art_number = 3
 
 def main():
     logger(msg="-"*60, level="info")
