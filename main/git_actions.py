@@ -198,6 +198,10 @@ def commit(root:str, remote:str, push:bool, active_branch:str):
     logger(msg="commit(root:str, remote:str, push:bool, active_branch:str) - Iniciando commit", level="info")    
     logger(msg="-"*60, level="info")
 
+    if secrets_scan_repo(root=root):
+        pretty_printer("Se detecto un sectreto clavado, reviza antes de realizar commit.")
+        return
+
     pretty_printer("Opcion de guardado: ")
     pretty_printer("\t1- Guardar todo")
     pretty_printer("\t2- Especificar archivos")

@@ -173,7 +173,8 @@ def secrets_scan_repo(root:str):
         ["gitleaks", "detect", "--source", root, "--no-git"],
         capture_output=True,
         text=True,
-        cwd=root
+        cwd=root,
+        shell=True
     )
 
     if result.returncode != 0:        
