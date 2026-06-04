@@ -106,16 +106,16 @@ def get_branches(root:str):
         for r_branch in remote_branches:
             r_branch = str(r_branch.split("/")[-1]).strip()
 
-            if branch in r_branch:
+            if branch == r_branch:
                 remote_flag = True            
 
         if remote_flag:
-            if active_branch in branch:
+            if active_branch == branch:
                 branches_status.append(f"-> {branch} (local - remoto)")
             else:
                 branches_status.append(f"- {branch} (local - remoto)")
         else:
-            if active_branch in branch:
+            if active_branch == branch:
                 branches_status.append(f"-> {branch} (local)")
             else:
                 branches_status.append(f"- {branch} (local)")
@@ -128,7 +128,7 @@ def get_branches(root:str):
         for branch in local_branches:
             branch = branch.replace('*', '').strip()
 
-            if branch_r in branch:
+            if branch_r == branch:
                 only_remote_flag = False
 
         if only_remote_flag:
@@ -283,7 +283,9 @@ def del_branch(root:str, remote:str, active_branch:str):
     flag_is_only_remote = False
     flag_is_only_local = False
     for branch_s in branches_s:
-        if branch in branch_s:
+        branch_s_name = str(branch_s.split(' ')[1]).strip()
+
+        if branch == branch_s_name:
             if "remoto" in branch_s  and "local" not in branch_s:
                 flag_is_only_remote = True
             if "local" in branch_s  and "remoto" not in branch_s:
@@ -316,21 +318,20 @@ def del_branch(root:str, remote:str, active_branch:str):
             if option == 1 and flag_is_only_remote is not True:
                 command_exec(f"git branch -D {branch}", cwd=root, response=True)   
             elif option == 1 and flag_is_only_remote is True:
-                command_exec(f"git push {remote} -D {branch}", cwd=root, response=True)   
+                command_exec(f"git push {remote} --delete  {branch}", cwd=root, response=True)   
             elif option == 2:                                
                 return
             
-            # Si no era solo remota preguntamos si deseamos 
-            # reflejar la eliminacion de la rama local en el remoto
-            if not flag_is_only_remote and not flag_is_only_local:
-                option = only_int_options(max_number_option=2, msg=f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ")
+        # Si no era solo remota preguntamos si deseamos 
+        # reflejar la eliminacion de la rama local en el remoto
+        if not flag_is_only_remote and not flag_is_only_local:
+            option = only_int_options(max_number_option=2, msg=f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ")
 
-                if option == 1 and flag_is_only_remote is not True:
-                    command_exec(f'''git push -u {remote} {branch}''', cwd=root, response=True)
-                    command_exec(f"git push {remote} --DELETE {branch}", cwd=root, response=True)
-                    update_local(root=root)   
-                elif option == 2:
-                    return    
+            if option == 1 and flag_is_only_remote is not True:                
+                command_exec(f"git push {remote} --delete  {branch}", cwd=root, response=True)   
+                update_local(root=root)   
+            elif option == 2:
+                return    
         
     elif option == 2:
         return
