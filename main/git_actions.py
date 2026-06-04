@@ -7,6 +7,9 @@ import shutil
 # importacion de herramientas de trabajo
 from tools import *
 
+# Regex
+import re
+
 def get_workspace():
     logger(msg="-"*60, level="info")
     logger(msg="get_workspace() - Estableciendo espacio de trabajo", level="info")        
@@ -17,8 +20,15 @@ def get_workspace():
         root = pretty_printer("Digite la ruta de trabajo (Donde este el archivo .git): \n", inputF=True)    
         root = root.strip()
 
+        # Regex para identificar rutas con terminacion en archivos (Compatible rutas Linux '/' y Windows '\')
+        pattern = re.compile(r"[\\/][^\\/]+\.[^\\/]+$")
+
         if len(root) != 0 and os.path.exists(root):
-            flag = False            
+                if bool(pattern.search(root)):
+                    pretty_printer("Ruta erronea !!!")
+                    print("-"*60)
+                else:
+                    flag = False            
         else:
             pretty_printer("Ruta erronea !!!")
             print("-"*60)

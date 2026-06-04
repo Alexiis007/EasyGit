@@ -56,5 +56,4 @@ Pendientes
 
 7-Cree una rama con el nombre remote/origin/ al inicio :(
 
-10- Error cuanto insertas la ruta local de un repo y se inserta una ruta con terminacion a un ejecutable Ejemplo: C:\Users\cjuarez\Desktop\EasyGit\main\git_actions.py
 
