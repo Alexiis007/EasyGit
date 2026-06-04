@@ -268,6 +268,7 @@ def del_branch(root:str, remote:str, active_branch:str):
         return
 
     # Mensaje de confirmacion
+    print("-"*60)
     pretty_printer(f"Realmente quieres borrar {branch}:")
     pretty_printer("\t1- Si, continuar")
     pretty_printer("\t2- No, regresar")
