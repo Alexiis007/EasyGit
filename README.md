@@ -1,66 +1,202 @@
-Libreria para generar archivos exe:
-    pip install pyinstaller
+# EasyGit
 
-Comando para generarlo:
-    pyinstaller --onefile main.py
+<div align="center">
 
--> Opcionales
+```text
+███████╗ █████╗ ███████╗██╗   ██╗ ██████╗ ██╗████████╗
+██╔════╝██╔══██╗██╔════╝╚██╗ ██╔╝██╔════╝ ██║╚══██╔══╝
+█████╗  ███████║███████╗ ╚████╔╝ ██║  ███╗██║   ██║
+██╔══╝  ██╔══██║╚════██║  ╚██╔╝  ██║   ██║██║   ██║
+███████╗██║  ██║███████║   ██║   ╚██████╔╝██║   ██║
+╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝   ╚═╝
+```
 
-Sin consola:
-    --noconsole
+CLI para Windows diseñada para simplificar el flujo de trabajo con Git y GitHub desde terminal.
 
-icono:
-    --icon=icon.ico
+Automatiza tareas comunes como manejo de ramas, commits, pushes y autenticación segura mediante tokens cifrados.
 
-error de imports no identificados:
-    --hidden-import modulo
+</div>
 
-cambio de nombre del exe:
-    pyinstaller --onefile --name EasyGit main.py
+---
 
-Comando final: 
-    pyinstaller --onefile --icon=.\assets\nerv.ico --name EasyGit .\main\__main__.py
+## Descripción
 
-    Si al correr el .exe generado se tiene errores de librerias puedes
-    probar borrando los archivos dist y build, despues generar de nuevo.
+EasyGit es una herramienta de línea de comandos que centraliza operaciones frecuentes de Git en una interfaz interactiva.
 
-    Igual es necesario que tengas un .venv    
+Su objetivo es reducir la complejidad del uso de Git en proyectos diarios, especialmente en entornos Windows.
 
---------------------------------------------------------------------
-Instalacion de librerias .venv
---------------------------------------------------------------------
-Activar .venv
-    .\.venv\Scripts\activate
-Instalacion
-    python -m pip install modulo
-Verifica
-    python -c "import modulo; print('ok')"
+---
 
+## Características
 
----- > Error si la hora del PC no esta bien
----- > Errore porque Git no esta instalado
----- > Agregar acceso rapido (opcion) de crear un repo en esccritorio 
+### Gestión de Git simplificada
 
+- Cambio de ramas
+- Creación de ramas
+- Eliminación de ramas locales/remotas
+- Commits rápidos
+- Commit + Push en un solo paso
+- Push con tracking automático
+- Merge entre ramas
+- Historial de commits
+- Ejecución de comandos personalizados
+- Acceso directo al repositorio web
+- Explorador de archivos integrado
 
---------------------------------------------------------------------
-Pendientes
---------------------------------------------------------------------
-1- Identificar ramas remotas al borrarlas y aplicar "git push origin --delete RAMA"
+---
 
-2- Puedo crear ramas a partir de ramas que no existen - Agregar validacion
+### Seguridad de credenciales
 
-3- del_branch() reefactorizar
+Los tokens de GitHub se manejan de forma segura:
 
-4-Nueva opcion mover modificaciones de archivos a otra rama - git stash --include-untracked
+- Validación previa contra GitHub API
+- Cifrado con **Fernet**
+- Derivación de clave con **PBKDF2-HMAC-SHA256**
+- Salt único por usuario
+- Contraseña maestra para acceso
 
-5 Identificar cuando se va un token clavado
+---
 
-6- Deteccion de commits de diferencia contra main: git cherry main pdf-detallado-layout-header
+## Inicio de sesión
 
-7-Cree una rama con el nombre remote/origin/ al inicio :(
+EasyGit permite múltiples usuarios GitHub en un mismo entorno:
 
-8- Reflejar rama en remoto: git push -u origin pdf-detallado-layout-header
+- Registro de usuarios con token cifrado
+- Inicio de sesión con contraseña maestra
+- Eliminación automática de credenciales inválidas o vencidas
 
-9- Borrar rama remota cuando la local ya no existe:git push origin --delete pdf-detallado-layout-header
+---
 
-10- Error cuanto insertas la ruta local de un repo y se inserta una ruta con terminacion a un ejecutable Ejemplo: C:\Users\cjuarez\Desktop\EasyGit\main\git_actions.py
+## Vista de la CLI
+
+```text
+------------------------------------------------------------
+Ramas existentes en el espacio de trabajo:
+------------------------------------------------------------
+
+-> dev (local - remoto)
+- main (local - remoto)
+
+------------------------------------------------------------
+Estatus de rama actual - dev:
+------------------------------------------------------------
+
+-> Archivos modificados
+-> Archivos nuevos
+
+------------------------------------------------------------
+Que deseas realizar:
+------------------------------------------------------------
+
+1- Cambiar rama de trabajo
+2- Realizar commit
+3- Commit + push
+4- Crear rama
+5- Borrar rama
+6- Merge
+7- Comando personalizado
+8- Historial de commits
+9- Abrir explorador de Windows
+10- Actualizar ventana
+11- Abrir repo web
+12- Push rama
+13- Cerrar sesión
+```
+
+---
+
+## Instalación
+
+### Requisitos
+
+- Python 3.12+
+- Git instalado y agregado al PATH
+- Windows 10+
+
+---
+
+### Entorno virtual
+
+```bash
+python -m venv .venv
+.\.venv\Scripts\activate
+```
+
+---
+
+### Dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Generar ejecutable
+
+Instalar PyInstaller:
+
+```bash
+pip install pyinstaller
+```
+
+---
+
+Compilar:
+
+```bash
+pyinstaller --onefile ^
+--icon=.\assets\nerv.ico ^
+--name EasyGit ^
+.\main\__main__.py
+```
+
+---
+
+## Estructura del proyecto
+
+```text
+EasyGit/
+│
+├── assets/
+├── build/
+├── dist/
+│
+├── main/
+│   ├── __main__.py
+│   ├── git_actions.py
+│   ├── gui.py
+│   ├── tools.py
+│   ├── tokens.py
+│
+├── .gitignore
+├── EasyGit.spec
+└── README.md
+```
+
+---
+
+## Seguridad
+
+Las credenciales se almacenan en:
+
+```text
+Desktop/credentials/
+├── usuario.key
+└── usuario.salt
+```
+
+Proceso:
+
+- Token validado con GitHub
+- Cifrado con Fernet
+- Clave derivada con PBKDF2
+- Acceso protegido por contraseña maestra
+
+---
+
+## Autor
+
+**Alexsis007**
+
+Herramienta creada para optimizar flujos de trabajo con Git desde terminal en Windows.
