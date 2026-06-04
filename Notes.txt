@@ -52,14 +52,9 @@ Pendientes
 
 6- Deteccion de commits de diferencia contra main: git cherry main pdf-detallado-layout-header
 
-7-Cree una rama con el nombre remote/origin/ al inicio :(
+11- usar git cherry -v main para verificar cambios de diferencia contra main
 
-8- Reflejar rama en remoto: git push -u origin pdf-detallado-layout-header
+7-Cree una rama con el nombre remote/origin/ al inicio :(
 
 10- Error cuanto insertas la ruta local de un repo y se inserta una ruta con terminacion a un ejecutable Ejemplo: C:\Users\cjuarez\Desktop\EasyGit\main\git_actions.py
 
-11- usar git cherry -v main para verificar cambios de diferencia contra main
-
-12- Revizar y probar la funcion de borrando
-
-AAA
