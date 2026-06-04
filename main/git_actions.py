@@ -221,9 +221,23 @@ def new_branch(root:str, remote:str):
     logger(msg="-"*60, level="info")
     logger(msg="new_branch(root:str, remote:str) - Iniciando la creacion de rama", level="info")    
     logger(msg="-"*60, level="info")
-# 
 
-    branch = pretty_printer("A partir de que rama deseas partir: ", inputF=True)    
+    branch = str(pretty_printer("A partir de que rama deseas partir: ", inputF=True)).strip()
+
+    branches_s = get_branches(root=root)["branches_status"]
+
+    flag_branch_not_exists = True
+    for branch_s in branches_s:
+        branch_s = str(branch_s.split(" ")[1]).strip()
+        
+        if branch == branch_s:
+            flag_branch_not_exists = False
+    
+    if flag_branch_not_exists:
+        print("-"*60)
+        pretty_printer("La rama que se intenta usar de referencia no existe !")
+        pretty_printer("Se cancelara el proceso de creacion...")
+        return
 
     command_exec(f'''git switch {branch}''', cwd=root, response=True)
     update_local(root=root)      
