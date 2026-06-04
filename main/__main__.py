@@ -12,6 +12,8 @@ from tokens import *
 
 # from gui import *
 
+art_number = 2
+
 def main():
     logger(msg="-"*60, level="info")
     logger(msg="main() - Iniciando CLI", level="info")        
@@ -24,7 +26,7 @@ def main():
     flag = True
     while flag:
         subprocess.run("cls", shell=True)                        
-        nerv_art(2)        
+        art(art_number)        
         print("-"*60)  
 
         pretty_printer("Iniciar en repo existente o crear un espacio nuevo:")
@@ -57,7 +59,7 @@ def main():
     subprocess.run("cls", shell=True)                    
 
     while True:         
-        nerv_art(2)                      
+        art(art_number)                      
         print("-"*60)  
 
         data_branches = get_branches(root=root)

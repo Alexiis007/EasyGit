@@ -255,7 +255,7 @@ def sessions():
 
     while flag:
         subprocess.run("cls", shell=True)        
-        nerv_art(2)        
+        art(4)        
 
         print("-"*60)  
         pretty_printer("Inicio de sesion")        
