@@ -9,12 +9,20 @@ class main_app(App):
     CSS_PATH = "Components\\style.tcss"
 
     def compose(self):
-        yield Sessions_gui(on_success=self.on_login_success)
+        yield Sessions_gui(on_success=self.on_Sessions_gui_success)
 
-    def on_login_success(self, token):
+    # Finalizando el objetivo de vida de Sessions_gui obtenemos la respuesta requerida
+    def on_Sessions_gui_success(self, token):
         self.token = token                
         self.query_one(Sessions_gui).remove()
-        self.mount(ConfigRepo_gui())
+        self.mount(ConfigRepo_gui(token, on_success=self.on_ConfigRepo_gui_success))
+
+    # Finalizando el objetivo de vida de Sessions_gui obtenemos la respuesta requerida
+    def on_ConfigRepo_gui_success(self, root, remote):
+        self.remote = remote        
+
+        self.query_one(ConfigRepo_gui).remove()
+        self.mount(EasyGit_gui())
         
 if __name__ == "__main__":
     app = main_app()

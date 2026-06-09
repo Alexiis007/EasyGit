@@ -10,44 +10,26 @@ from tools import *
 # Regex
 import re
 
-def get_workspace():
+def get_workspace(root:str):
     logger(msg="-"*60, level="info")
     logger(msg="get_workspace() - Estableciendo espacio de trabajo", level="info")        
     logger(msg="-"*60, level="info")
+    
+    root = root.strip()
 
-    flag = True
-    while flag:
-        root = pretty_printer("Digite la ruta de trabajo (Donde este el archivo .git): \n", inputF=True)    
-        root = root.strip()
+    # Regex para identificar rutas con terminacion en archivos (Compatible rutas Linux '/' y Windows '\')
+    pattern = re.compile(r"[\\/][^\\/]+\.[^\\/]+$")
 
-        # Regex para identificar rutas con terminacion en archivos (Compatible rutas Linux '/' y Windows '\')
-        pattern = re.compile(r"[\\/][^\\/]+\.[^\\/]+$")
-
-        if len(root) != 0 and os.path.exists(root):
-                if bool(pattern.search(root)):
-                    pretty_printer("Ruta erronea !!!")
-                    print("-"*60)
-                else:
-                    flag = False            
-        else:
-            pretty_printer("Ruta erronea !!!")
-            print("-"*60)
-        
-    # pretty_printer("Verificando la existencia del archivo .git")
+    if len(root) != 0 and os.path.exists(root):
+            if bool(pattern.search(root)):
+                return False          
+    else:
+        return False
     
     list_dir = command_exec("dir /a", cwd=root, response=True)
-
-    print("-"*60)
+    
     if not ".git" in list_dir:
-        command_exec("cls", root)        
-        pretty_printer("La ruta establecida no contiene una archivo .git.")
-        pretty_printer("Por favor intente de nuevo.")
-        print("-"*60)
-        get_workspace()
-    else:                
-        pretty_printer("Ruta establecida !")                
-
-    print("-"*60)
+        return False    
 
     return root
 
@@ -490,36 +472,14 @@ def merge(root:str, active_branch:str):
     pretty_printer(f"-> La rama {merge} al finalizar el merge seguira existiendo,\nesta la puedes borrar despues")
     pretty_printer(f"-> Recuerda hacer un push de tu rama {branch}")
 
-def clone(token:str):
+def clone(token:str, https:str, user:str, root:str, repo_name:str):
     logger(msg="-"*60, level="info")
     logger(msg="clone(token:str) - Iniciando clonacion de repositorio", level="info")
-    logger(msg="-"*60, level="info")
-    https = pretty_printer("Ingrese el HTTPS de su repo: ", inputF=True)
-    user = pretty_printer("Ingrese el nombre de su usuario en git: ", inputF=True)
-    # token = pretty_printer("Ingrese el token de su sesion git: ", inputF=True)    
-
-    repo_name = https.split("/")[-1].replace(".git", "")
-    
-    print("-"*60)  
-    flag = True
-
-    while flag:        
-        root = pretty_printer("Ingresa la ruta local donde deseas crear el repo: ", inputF=True)
-        if not os.path.exists(os.path.join(root, repo_name)):
-            flag = False
-        else:
-            pretty_printer(f"Ya existe un directorio (repo) con el nombre {repo_name} en")
-            pretty_printer(f"la ruta {root}")
-            pretty_printer(f"Por favor revisa bien donde crearas tu repo...")
-            print("-"*60)  
+    logger(msg="-"*60, level="info")  
 
     remote_root_token = https.replace("github.com", f"{user}:{token}@github.com")    
 
     command_exec(f"git clone {remote_root_token}", cwd=root, response=True)
-
-    print("-"*60)  
-    pretty_printer(f"Reposistorio {repo_name} creado con exito en la ruta:")
-    pretty_printer(root,"\n")
 
     root = os.path.join(root, repo_name)
 
@@ -528,29 +488,12 @@ def clone(token:str):
 
     return root, remote_root_token
     
-def new_repo(token:str):
+def new_repo(token:str, https:str, user:str, root:str, repo_name:str):
     logger(msg="-"*60, level="info")
     logger(msg="new_repo(token:str) - Iniciando creacion de repositorio", level="info")
     logger(msg="-"*60, level="info")
-    https = pretty_printer("Ingrese el HTTPS de su nuevo repo (Antes crealo en git): \n", inputF=True)
-    user = pretty_printer("Ingrese el nombre de su usuario en git: ", inputF=True)
-    # token = pretty_printer("Ingrese el token de su sesion git: ", inputF=True)    
-
-    repo_name = https.split("/")[-1].replace(".git", "")
-    remote_root_token = https.replace("github.com", f"{user}:{token}@github.com") 
     
-    print("-"*60)  
-    flag = True
-
-    while flag:        
-        root = pretty_printer("Ingresa la ruta local donde desea comenzar su nuevo repo: ", inputF=True)
-        if not os.path.exists(os.path.join(root, repo_name)):
-            flag = False
-        else:
-            pretty_printer(f"Ya existe un directorio (repo) con el nombre {repo_name} en")
-            pretty_printer(f"la ruta {root}")
-            pretty_printer(f"Por favor revisa bien donde crearas tu repo...")
-            print("-"*60)  
+    remote_root_token = https.replace("github.com", f"{user}:{token}@github.com")            
 
     root = os.path.join(root, repo_name)
     os.mkdir(root)            
@@ -569,8 +512,6 @@ def new_repo(token:str):
     command_exec(f"git remote add origin {remote_root_token}", cwd=root, response=True)
     command_exec("git branch -M main", cwd=root, response=True)
     command_exec(f"git push --force {remote_root_token} main ", cwd=root, response=True)
-
-    print("-"*60)  
 
     return root, remote_root_token
 
