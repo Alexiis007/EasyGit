@@ -22,6 +22,7 @@ class Sessions_gui(Static):
         self.token = ""        
 
     def compose(self):
+
         menu_sessions = Static(dedent("""
                 1- Iniciar sesion
                 2- Registrar un token usuario nuevo

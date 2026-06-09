@@ -70,9 +70,17 @@
 }
 
 /*----------------------------------------*/
-/* Estilos Screen */
+/* Estilos Screen - Globales*/
 /*----------------------------------------*/
 Screen {
     background: black;
     align: center top;
+}
+
+#logo {
+    color: #00ff00;
+    text-align: center;
+    align: center top;    
+    width: 90%;
+    border: round  #00ff00;
 }
