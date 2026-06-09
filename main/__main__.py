@@ -10,7 +10,7 @@ from git_actions import *
 # Funcionalidad para el uso de sesiones - tokens
 from tokens import *
 
-# from gui import *
+from main.app import *
 
 art_number = 3
 
@@ -19,10 +19,10 @@ def main():
     logger(msg="main() - Iniciando CLI", level="info")        
     logger(msg="-"*60, level="info")
     
-    subprocess.run("color 0A", shell=True)                        
+    # subprocess.run("color 0A", shell=True)                        
 
     # Inicio de sesion / Registro de sesion (Menu)
-    token = sessions()    
+    # token = sessions()    
 
     flag = True
     while flag:
@@ -143,12 +143,7 @@ def main():
             subprocess.run("cls", shell=True) 
         
 if __name__ == "__main__":
-    main()
-    
-    # app = QtWidgets.QApplication([])
+    # main()
 
-    # widget = MyWidget()
-    # widget.resize(800, 600)
-    # widget.show()
-
-    # sys.exit(app.exec())
+    app = main_app()
+    app.run()

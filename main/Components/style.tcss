@@ -1,0 +1,78 @@
+/*----------------------------------------*/
+/* Estilos de Sessions */
+/*----------------------------------------*/
+#content_sessions {    
+    border: round #00ff00;   
+    width: 90%;            
+    box-sizing: border-box;
+    align: center top;
+    padding: 1;
+}
+
+#menu_sessions, #list_users_sessions {    
+    color: #00ff00;
+    border: round #00ff00;       
+    padding: 0 0 0 1; /*Top, right, bottom, left*/    
+    margin-bottom: 1;
+    box-sizing: border-box;
+}
+
+#input_sessions{
+    color: #00ff00;
+}
+
+/*----------------------------------------*/
+/* Estilos de ConfigRepo */
+/*----------------------------------------*/
+
+#content_ConfigRepo {    
+    border: round #00ff00;   
+    width: 90%;            
+    box-sizing: border-box;
+    align: center top;
+    padding: 1;
+}
+
+#menu_ConfigRepo {    
+    color: #00ff00;
+    border: round #00ff00;       
+    padding: 0 0 0 1; /*Top, right, bottom, left*/    
+    margin-bottom: 1;
+    box-sizing: border-box;
+}
+
+#input_ConfigRepo{
+    color: #00ff00;
+}
+
+/*----------------------------------------*/
+/* Estilos de EasyGit */
+/*----------------------------------------*/
+
+#content_EasyGit {    
+    border: round #00ff00;   
+    width: 90%;            
+    box-sizing: border-box;
+    align: center top;
+    padding: 1;
+}
+
+#menu_EasyGit {    
+    color: #00ff00;
+    border: round #00ff00;       
+    padding: 0 0 0 1; /*Top, right, bottom, left*/    
+    margin-bottom: 1;
+    box-sizing: border-box;
+}
+
+#input_EasiGit{
+    color: #00ff00;
+}
+
+/*----------------------------------------*/
+/* Estilos Screen */
+/*----------------------------------------*/
+Screen {
+    background: black;
+    align: center top;
+}
