@@ -87,8 +87,10 @@ def get_branches(root:str):
     logger(msg="get_branches(root:str) - Iniciando la obtencion de ramas", level="info")        
     logger(msg="-"*60, level="info")
 
+    # Sincronizacion de local con remoto
     update_local(root=root)
 
+    # Extraemos las ramas locales y remotas existentes (-a)
     res = command_exec("git branch -a", response=True, cwd=root)
 
     active_branch = ""
@@ -99,16 +101,20 @@ def get_branches(root:str):
 
     # Llenado de listado de datos realacionados a las ramas
     for str_branch in res.split('\n'):
+        # Obtencion de ramas en general
         if len(str(str_branch)) > 0:            
             branches.append(str_branch)
+        # Obtencion de rama activa
         if "*" in str_branch and len(str_branch)>0:
             active_branch = str_branch.split(" ")[-1]        
+        # Obtencion de ramas remotas
         if "remote" in str_branch and len(str_branch)>0:
             remote_branches.append(str_branch)
+        # Obtencion de ramas locales
         if "remote" not in str_branch and len(str_branch)>0:
             local_branches.append(str_branch)
 
-    # Llenado de branches_status con las ramas que de identificand como locales y remotas
+    # Llenado de branches_status con las ramas que se identificaron como locales y remotas
     for branch in local_branches:
         branch = branch.replace('*', '').strip()
 
@@ -130,7 +136,7 @@ def get_branches(root:str):
             else:
                 branches_status.append(f"- {branch} (local)")
 
-    # Llenado de branches_status con las ramas que de identificand como solo remotas
+    # Llenado de branches_status con las ramas que se identificaron como solo remotas
     for branch_r in remote_branches:
         branch_r = branch_r.split("/")[-1].strip()
 
@@ -144,7 +150,6 @@ def get_branches(root:str):
         if only_remote_flag:
             branches_status.append(f"- {branch_r} (remoto)")    
                          
-
     data_branches = {
         "active_branch": active_branch,
         "branches": branches,
