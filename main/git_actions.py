@@ -257,7 +257,7 @@ def new_branch(root:str, remote:str):
     command_exec(f"git switch -c {new_branch}", cwd=root, response=True)
     update_local(root=root)      
 
-    option = only_int_options(max_number_option=2, msg=f"Deseas reflejar {branch} en el remoto? (1 Si) o (2 No): ")
+    option = only_int_options(max_number_option=2, msg=f"Deseas reflejar {new_branch} en el remoto? (1 Si) o (2 No): ")
 
     if option == 1:
         command_exec(f'''git push -u {remote} {new_branch}''', cwd=root, response=True)
