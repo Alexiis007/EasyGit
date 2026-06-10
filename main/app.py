@@ -15,13 +15,13 @@ class main_app(App):
         self.arte = Static(dedent("""
       ███████╗ █████╗ ███████╗██╗   ██╗ ██████╗ ██╗████████╗
       ██╔════╝██╔══██╗██╔════╝╚██╗ ██╔╝██╔════╝ ██║╚══██╔══╝
-   █████╗  ███████║███████╗ ╚████╔╝ ██║  ███╗██║   ██║
-   ██╔══╝  ██╔══██║╚════██║  ╚██╔╝  ██║   ██║██║   ██║
-   ███████╗██║  ██║███████║   ██║   ╚██████╔╝██║   ██║
-   ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝   ╚═╝
+    █████╗  ███████║███████╗ ╚████╔╝ ██║  ███╗██║   ██║
+    ██╔══╝  ██╔══██║╚════██║  ╚██╔╝  ██║   ██║██║   ██║
+    ███████╗██║  ██║███████║   ██║   ╚██████╔╝██║   ██║
+    ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝   ╚═╝
         """), id="logo")
         self.arte.border_title = "Alexsis007"
-        yield self.arte
+        # yield self.arte
 
         yield Sessions_gui(on_success=self.on_Sessions_gui_success)
 
@@ -34,9 +34,10 @@ class main_app(App):
     # Finalizando el objetivo de vida de Sessions_gui obtenemos la respuesta requerida
     def on_ConfigRepo_gui_success(self, root, remote):
         self.remote = remote        
+        self.root = root        
 
         self.query_one(ConfigRepo_gui).remove()
-        self.mount(EasyGit_gui())
+        self.mount(EasyGit_gui(self.root, self.remote, self.token))
         
 if __name__ == "__main__":
     app = main_app()

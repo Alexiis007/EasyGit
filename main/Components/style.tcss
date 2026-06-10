@@ -57,7 +57,7 @@
     padding: 1;
 }
 
-#menu_EasyGit {    
+#menu_EasyGit, #ramas_EasyGit, #modified_files_EasyGit, #new_files_EasyGit {    
     color: #00ff00;
     border: round #00ff00;       
     padding: 0 0 0 1; /*Top, right, bottom, left*/    

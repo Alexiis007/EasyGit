@@ -359,9 +359,6 @@ def status(root:str, active_branch:str):
     logger(msg="-"*60, level="info")
     logger(msg="status(root:str, active_branch:str) - Obteniendo el status de cambios", level="info")    
     logger(msg="-"*60, level="info")
-
-    pretty_printer(f"Estatus de rama actual - {active_branch}:")
-    print("-"*60)
             
     commits_not_stage = []
     untracked_files = []
@@ -370,7 +367,7 @@ def status(root:str, active_branch:str):
         "dist",
         "build",
         "venv"
-    ]
+    ]    
 
     # Llenado de listados de cambios y archivos nuevos
     status = command_exec("git status", cwd=root, response=True)
@@ -393,7 +390,7 @@ def status(root:str, active_branch:str):
                         break                        
             count+=1        
     else:
-        pretty_printer("No se tiene nungun status...")
+        commits_not_stage.append("No se tiene nungun status...")
     
     # Eliminación de elementos ignore. [:] crea una copia de el array
     for line in commits_not_stage[:]:
@@ -405,27 +402,14 @@ def status(root:str, active_branch:str):
         for ignore in data_ignore:
             if ignore in line:
                 untracked_files.remove(line)
-        
-    # Listado de archivos modificados    
-    pretty_printer(f"-> Archivos modificados({len(commits_not_stage)}) - {active_branch}:")    
-        
-    count = 0
-    for i in commits_not_stage:
-        count+=1
-        pretty_printer(f"\t{count}- Archivo modificado: {i.replace("\tmodified:   ", "")}")
-    if count == 0:
-        pretty_printer("\tNo hay archivos modificados.")
     
-    # Listado de archivos nuevos
-    pretty_printer(f"\n-> Archivos nuevos creados({len(untracked_files)}) - {active_branch}:")    
-    
-    count = 0
-    for i in untracked_files:
-        count+=1
-        pretty_printer(f"\t{count}- Nuevo archivo detectado: {i.replace("\t", "")}")
+    data_status = {
+        "commits_not_stage": commits_not_stage,
+        "untracked_files": untracked_files
+    }
 
-    if count == 0:
-        pretty_printer("\tNo hay archivos nuevos detectados.")
+    return data_status
+
         
 def hist_commits(root:str, active_branch:str):
     logger(msg="-"*60, level="info")
