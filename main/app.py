@@ -21,7 +21,7 @@ class main_app(App):
     ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝   ╚═╝
         """), id="logo")
         self.arte.border_title = "Alexsis007"
-        # yield self.arte
+        yield self.arte
 
         yield Sessions_gui(on_success=self.on_Sessions_gui_success)
 
